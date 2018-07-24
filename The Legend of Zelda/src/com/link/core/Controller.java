@@ -109,14 +109,9 @@ public class Controller {
 		player = new Player();
 		heartManager = new HeartManager();
 		
-		for (int i = 0; i < SCREEN_WIDTH; i++) {
-			for (int j = 0; j < SCREEN_HEIGHT; j++) {
-				int v = tileMap[currentScreenX][currentScreenY][i][j];
-				int w = collisionMap[currentScreenX][currentScreenY][i][j];
-				
-				tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-			}
-		}
+		map = 0;
+		
+		generateTiles();
 		
 		hearts = heartManager.tick(true);
 		
@@ -213,18 +208,9 @@ public class Controller {
 					player.x = caveEntranceTileLocation[0] * 64;
 					player.caveAnimation();
 					
-					tiles.clear();
-					
 					map = 0;
 					
-					for (int i = 0; i < SCREEN_WIDTH; i++) {
-						for (int j = 0; j < SCREEN_HEIGHT; j++) {
-							int v = tileMap[currentScreenX][currentScreenY][i][j];
-							int w = collisionMap[currentScreenX][currentScreenY][i][j];
-							
-							tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-						}
-					}
+					generateTiles();
 				}
 				else if (animateCaveEntrance && !animateCaveEntranceFinish) {
 					player.caveAnimation();
@@ -244,14 +230,7 @@ public class Controller {
 			else {
 				map = 0;
 				
-				for (int i = 0; i < SCREEN_WIDTH; i++) {
-					for (int j = 0; j < SCREEN_HEIGHT; j++) {
-						int v = tileMap[currentScreenX][currentScreenY][i][j];
-						int w = collisionMap[currentScreenX][currentScreenY][i][j];
-						
-						tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-					}
-				}
+				generateTiles();
 			}
 		}
 		
@@ -268,16 +247,7 @@ public class Controller {
 					player.caveAnimation();
 				}
 				else if (animateCaveEntranceFinish && !animateCaveEntrance) {
-					tiles.clear();
-					
-					for (int i = 0; i < SCREEN_WIDTH; i++) {
-						for (int j = 0; j < SCREEN_HEIGHT; j++) {
-							int v = caveTileMap[currentScreenX][currentScreenY][i][j];
-							int w = caveCollisionMap[currentScreenX][currentScreenY][i][j];
-							
-							tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-						}
-					}
+					generateTiles();
 					
 					
 					player.x = (double)480;
@@ -288,17 +258,7 @@ public class Controller {
 				}
 			}
 			else {
-				tiles.clear();
-				
-				for (int i = 0; i < SCREEN_WIDTH; i++) {
-					for (int j = 0; j < SCREEN_HEIGHT; j++) {
-						int v = caveTileMap[currentScreenX][currentScreenY][i][j];
-						int w = caveCollisionMap[currentScreenX][currentScreenY][i][j];
-						
-						tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-					}
-				}
-				
+				generateTiles();
 				
 				player.x = (double)480;
 				player.y = (double)576;
@@ -318,25 +278,8 @@ public class Controller {
 					player.caveAnimation();
 				}
 				else if (animateCaveEntranceFinish && !animateCaveEntrance) {
-					tiles.clear();
+					generateTiles();
 					
-					for (int i = 0; i < SCREEN_WIDTH; i++) {
-						for (int j = 0; j < SCREEN_HEIGHT; j++) {
-							int v = dungeonTileMap[currentScreenX][currentScreenY][i][j];
-							int w = dungeonCollisionMap[currentScreenX][currentScreenY][i][j];
-							
-							int u = dungeonDoors[currentScreenX][currentScreenY][i][j];
-							
-							tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 31, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), w, 0));
-							if (u != 36) {
-								if (u == 0 || u == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
-								if (u == 2 || u == 3) tiles.add(new LevelTile(i * 64, j * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
-							}
-						}
-					}
-					
-					tiles.add(new LevelTile(0, 0, SpriteSheet.grabImage(dungeonBorderMap[currentScreenX][currentScreenY], 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, 0));
-									
 					player.x = (double)480;
 					player.y = (double)256;
 					
@@ -347,18 +290,7 @@ public class Controller {
 				}
 			}
 			else {
-				tiles.clear();
-				
-				for (int i = 0; i < SCREEN_WIDTH; i++) {
-					for (int j = 0; j < SCREEN_HEIGHT; j++) {
-						int v = dungeonTileMap[currentScreenX][currentScreenY][i][j];
-						int w = dungeonCollisionMap[currentScreenX][currentScreenY][i][j];
-						
-						tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), w, 0));
-					}
-				}
-				
-				tiles.add(new LevelTile(0, 0, SpriteSheet.grabImage(dungeonBorderMap[currentScreenX][currentScreenY], 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, 0));
+				generateTiles();
 				
 				player.x = (double)480;
 				player.y = (double)576;
@@ -501,44 +433,8 @@ public class Controller {
 			player.y = 640;
 		}
 		
-		for (int i = 0; i < SCREEN_WIDTH; i++) {
-			for (int j = 0; j < SCREEN_HEIGHT; j++) {
-				int v = 0;
-				int w = 0;
-				
-				int u = 0;
-				
-				try {
-					if (map == 0) {
-						v = tileMap[currentScreenX][currentScreenY][i][j];
-						w = collisionMap[currentScreenX][currentScreenY][i][j];
-					}
-					else if (map == 1) {
-						v = caveTileMap[currentScreenX][currentScreenY][i][j];
-						w = caveCollisionMap[currentScreenX][currentScreenY][i][j];
-					}
-					else if (map == 2) {
-						v = dungeonTileMap[currentScreenX][currentScreenY][i][j];
-						w = dungeonCollisionMap[currentScreenX][currentScreenY][i][j];
-						
-						u = dungeonDoors[currentScreenX][currentScreenY][i][j];
-					}
-				}
-				catch (Exception e) {					
-					failed = true;
-				}
-
-				if (map == 0 || map == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-				if (map == 2) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), w, 0));
-				
-				if (u != 36 && map == 2) {
-					if (u == 0 || u == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
-					if (u == 2 || u == 3) tiles.add(new LevelTile(i * 64, j * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
-				}
-			}
-		}
+		failed = generateTiles();
 		
-		if (map == 2) tiles.add(new LevelTile(0, 0, SpriteSheet.grabImage(dungeonBorderMap[currentScreenX][currentScreenY], 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, 0));
 		
 		if (failed) {
 			if (currentScreenX < 0) {
@@ -561,20 +457,59 @@ public class Controller {
 				player.y = 640;
 			}
 			
-			tiles.clear();
-			
-			for (int i = 0; i < SCREEN_WIDTH; i++) {
-				for (int j = 0; j < SCREEN_HEIGHT; j++) {
-					int v = 0;
-					int w = 0;
+			generateTiles();
+		}
+	}
+	
+	private boolean generateTiles() {
+		boolean failed = false;
+		
+		tiles.clear();
+		
+		for (int i = 0; i < SCREEN_WIDTH; i++) {
+			for (int j = 0; j < SCREEN_HEIGHT; j++) {
+				int v = 0;
+				int w = 0;
+				
+				int u = 0;
+				
+				try {
+					if (map == 0) {
+						v = tileMap[currentScreenX][currentScreenY][i][j];
+						w = collisionMap[currentScreenX][currentScreenY][i][j];
+					}
+					else if (map == 1) {
+						v = caveTileMap[currentScreenX][currentScreenY][i][j];
+						w = caveCollisionMap[currentScreenX][currentScreenY][i][j];
+					}
+					else if (map == 2) {
+						v = dungeonTileMap[currentScreenX][currentScreenY][i][j];
+						w = dungeonCollisionMap[currentScreenX][currentScreenY][i][j];
+						
+						u = dungeonDoors[currentScreenX][currentScreenY][i][j];
+					}
 					
-					v = tileMap[currentScreenX][currentScreenY][i][j];
-					w = tileMap[currentScreenX][currentScreenY][i][j];
+					failed = false;
+				}
+				catch (Exception e) {					
+					failed = true;
 					
-					tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
+					return failed;
+				}
+
+				if (map == 0 || map == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
+				if (map == 2) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), w, 0));
+				
+				if (u != 36 && map == 2) {
+					if (u == 0 || u == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
+					if (u == 2 || u == 3) tiles.add(new LevelTile(i * 64, j * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
 				}
 			}
 		}
+		
+		if (map == 2) tiles.add(new LevelTile(0, 0, SpriteSheet.grabImage(dungeonBorderMap[currentScreenX][currentScreenY], 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, 0));
+		
+		return failed;
 	}
 	
 	private boolean dungeonExit(int newX, int newY, int oldX, int oldY) {
