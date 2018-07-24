@@ -73,12 +73,15 @@ public class Player implements GameObjects {
 		tileX = (int)Math.floor((x / 4) / 16);
 		tileY = (int)Math.floor((y / 4) / 16); 
 		
-		if (!Game.getController().animateCaveEntrance) {
+		if (!Game.getController().animateCaveEntrance && !Game.getController().animateDungeonDoorExit) {
 			keyMovement();
 		}
-		else {
+		else if (Game.getController().animateCaveEntrance) {
 			xVel = 0;
 			yVel = 0;
+		}
+		else if (Game.getController().animateDungeonDoorExit) {
+			dungeonDoorAnimation();
 		}
 		
 		heartControl();
@@ -439,6 +442,23 @@ public class Player implements GameObjects {
 			Game.getController().animateCaveEntranceFinish = true;
 			Game.getController().animateCaveEntrance = false;
 			Game.getController().animateCaveEntranceTickCount = 0;
+		}
+	}
+	
+	public void dungeonDoorAnimation() {
+		Game.getController().animateDungeonDoorExitTickCount++;
+		
+		if (direction == 0) xVel = 4;
+		if (direction == 1) xVel = -4;
+		if (direction == 2) yVel = 4;
+		if (direction == 3) yVel = -4;
+		
+		if (Game.getController().animateDungeonDoorExitTickCount > 20) {
+			xVel = 0;
+			yVel = 0;
+			
+			Game.getController().animateDungeonDoorExit = false;
+			Game.getController().animateDungeonDoorExitTickCount = 0;
 		}
 	}
 	

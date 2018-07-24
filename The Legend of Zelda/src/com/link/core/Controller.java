@@ -63,6 +63,9 @@ public class Controller {
 	
 	public int animateCaveEntranceTickCount;
 	
+	public boolean animateDungeonDoorExit = false;
+	public int animateDungeonDoorExitTickCount;
+	
 	public int[] caveEntranceTileLocation = {0, 0};
 	
 	public Player player;
@@ -431,6 +434,10 @@ public class Controller {
 		else if (direction == 3) {
 			//currentScreenY--;
 			player.y = 640;
+		}
+		
+		if (map == 2) {
+			animateDungeonDoorExit = true;
 		}
 		
 		failed = generateTiles();
