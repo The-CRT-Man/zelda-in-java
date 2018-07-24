@@ -4,6 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import com.link.core.Controller;
+import com.link.core.Game;
 
 public class KeyInput extends KeyAdapter {	
 	public static boolean keyUp = false;
@@ -36,6 +37,17 @@ public class KeyInput extends KeyAdapter {
 		if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_SPACE) {
 			keyAttack = true;
 		}
+		
+		if (key == KeyEvent.VK_M) {
+			if (SoundEffect.musicEnabled) { 
+				SoundEffect.musicEnabled = false;
+				Game.getController().stopSounds();
+			}
+			else {
+				SoundEffect.musicEnabled = true;
+				Game.getController().updateSounds();
+			}
+		}
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -59,3 +71,4 @@ public class KeyInput extends KeyAdapter {
 		}
 	}
 }
+//

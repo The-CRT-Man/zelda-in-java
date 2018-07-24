@@ -72,7 +72,7 @@ public class Game extends Canvas implements Runnable {
 		game.setMinimumSize(windowSize);
 		
 		game.getClass();
-		
+			
 		Image windowImg = null;
 		Image taskImg = null;
 		
@@ -150,18 +150,9 @@ public class Game extends Canvas implements Runnable {
 		
 		Graphics g = bs.getDrawGraphics();
 		
-		//g.drawImage(background, 0, 0, null);
-		
-		
-		
-		
-		
 		controller.render(g);
 		
-		g.drawString("The Legend of Zelda, remade in Java. Art, music and game design are copyrights of Nintendo. Programmed by Toby Mann.", 7, 720);
-		
-//		String screen = "(" + controller.currentScreenX + ", " + controller.currentScreenY + ")";
-//		g.drawString((screen), 1050, 400);
+		g.drawString("The Legend of Zelda, remade in Java. Art, music and game design are copyrights of Nintendo.", 7, 720);
 		
 		g.dispose();
 		bs.show();
@@ -178,6 +169,7 @@ public class Game extends Canvas implements Runnable {
 		this.thread.start();
 	}
 	
+	// Starting the thread
 	private synchronized void stop() {
 	    if (!this.running) {
 	      return;

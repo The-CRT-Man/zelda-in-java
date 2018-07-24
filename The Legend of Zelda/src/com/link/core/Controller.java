@@ -188,6 +188,10 @@ public class Controller {
 		for (int i = 0; i < player.maxHealth / 2; i++) {
 			hearts.get(i).render(g);
 		}
+		
+		g.drawString("Press \"M\" to toggle sound.", 1030, 100);	
+		if (SoundEffect.musicEnabled) g.drawString("PLAYING", 1030, 112);
+		if (!SoundEffect.musicEnabled) g.drawString("MUTED", 1030, 112);
 	}
 	
 	public void changeMap(int map, boolean animate) {
@@ -195,6 +199,7 @@ public class Controller {
 		 * 0 = over world
 		 * 1 = cave
 		 * 2 = dungeon
+		 * 3 = dungeon passage
 		 */
 		
 		this.map = map;
@@ -338,7 +343,9 @@ public class Controller {
 			return;
 		}
 		
-		boolean leaveDungeonProperties = dungeonExit(currentScreenX, currentScreenY, previousScreenX, previousScreenY);
+		boolean leaveDungeonProperties = false;
+		
+		if (map == 2) leaveDungeonProperties = dungeonExit(currentScreenX, currentScreenY, previousScreenX, previousScreenY);
 		
 		if (leaveDungeonProperties && (scrollScreen || !complete) && map == 2) {
 			changeMap(0, true);
@@ -530,5 +537,21 @@ public class Controller {
 		}
 		
 		return exitProperties;
+	}
+	
+	public void stopSounds() {
+		music.stopSound();
+		dungeon.stopSound();
+	}
+	
+	public void updateSounds() {
+		if (map == 0) {
+			dungeon.stopSound();
+			music.startSound(true);
+		}
+		else if (map == 2) {
+			music.stopSound();
+			dungeon.startSound(true);
+		}
 	}
 }

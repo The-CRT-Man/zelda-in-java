@@ -9,9 +9,9 @@ import javax.sound.sampled.DataLine;
 import com.link.load.AudioLoader;
 
 public class SoundEffect {
-//	private boolean playingMusic = false;
-	
 	private Clip clip;
+	
+	public static boolean musicEnabled = true;
 	
 	public SoundEffect(String path) {
 		try {
@@ -36,12 +36,14 @@ public class SoundEffect {
 	}
 	
 	public void startSound(boolean shouldLoop) {
-		if (shouldLoop) {
-	    	clip.loop(Clip.LOOP_CONTINUOUSLY);
-	    }
-	    
-		clip.setFramePosition(0);
-	    clip.start();
+		if (musicEnabled) {
+			if (shouldLoop) {
+		    	clip.loop(Clip.LOOP_CONTINUOUSLY);
+		    }
+		    
+			clip.setFramePosition(0);
+		    clip.start();
+		}
 	}
 	
 	public boolean isRunning() {
