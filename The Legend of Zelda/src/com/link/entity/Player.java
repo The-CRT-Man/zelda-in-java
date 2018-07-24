@@ -83,6 +83,9 @@ public class Player implements GameObjects {
 		else if (Game.getController().animateDungeonDoorExit) {
 			dungeonDoorAnimation();
 		}
+		else {
+			System.out.println("OH NO");
+		}
 		
 		heartControl();
 
@@ -453,7 +456,7 @@ public class Player implements GameObjects {
 		if (direction == 2) yVel = 4;
 		if (direction == 3) yVel = -4;
 		
-		if (Game.getController().animateDungeonDoorExitTickCount > 20) {
+		if (Game.getController().animateDungeonDoorExitTickCount > 16) {
 			xVel = 0;
 			yVel = 0;
 			
@@ -490,6 +493,10 @@ public class Player implements GameObjects {
 	
 	public int getDirection() {
 		return direction;
+	}
+	
+	public void setDirection(int direction) {
+		this.direction = direction;
 	}
 	
 	public boolean isAttacking() {

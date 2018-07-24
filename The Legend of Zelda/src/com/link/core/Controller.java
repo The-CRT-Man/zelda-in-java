@@ -160,7 +160,7 @@ public class Controller {
 		}
 		
 		for (int i = 0; i < scrollTiles.size(); i++) {
-			scrollTiles.get(i).render(g);
+			if (scrollTiles.get(i).layer == LevelTile.BACKGROUND) scrollTiles.get(i).render(g);
 		}
 			
 		if (sword.isAttacking) {
@@ -286,10 +286,17 @@ public class Controller {
 					player.caveAnimation();
 				}
 				else if (animateCaveEntranceFinish && !animateCaveEntrance) {
+					int[] dungeonEntrancePosition = new int[3];
+					
+					dungeonEntrancePosition = dungeonEntrance();
+					
 					generateTiles();
 					
-					player.x = (double)480;
-					player.y = (double)256;
+					player.x = (double)dungeonEntrancePosition[1];
+					player.y = (double)dungeonEntrancePosition[2];
+					
+					player.setDirection(dungeonEntrancePosition[0]);
+					animateDungeonDoorExit = true;
 					
 					animateCaveEntranceFinish = false;
 					animateCaveEntrance = false;
@@ -304,6 +311,8 @@ public class Controller {
 				player.y = (double)576;
 
 			}
+			
+			
 		}
 	}
 	
@@ -537,6 +546,44 @@ public class Controller {
 		}
 		
 		return exitProperties;
+	}
+	
+	private int[] dungeonEntrance() {
+		// Array Structure [direction, x, y]
+		// REMEMBER: If the door is on the right, then the player will be walking left, etc!!!
+		
+		String door = "bottom";
+		int[] properties = new int[3];
+		
+		if (currentScreenX == 0 && currentScreenY == 0) {
+			currentScreenX = 0;
+			currentScreenY = 1;
+			
+			door = "right";
+		}
+		
+		if (door == "right") {
+			properties[0] = 1;
+			properties[1] = 15 * 64;
+			properties[2] = 5 * 64;
+		}
+		else if (door == "left") {
+			properties[0] = 0;
+			properties[1] = 0 * 64;
+			properties[2] = 5 * 64;
+		}
+		else if (door == "bottom") {
+			properties[0] = 3;
+			properties[1] = (7 * 64) + 32;
+			properties[2] = 10 * 64;
+		}
+		else if (door == "top") {
+			properties[0] = 2;
+			properties[1] = (7 * 64) + 32;
+			properties[2] = 0;
+		}
+		
+		return properties;
 	}
 	
 	public void stopSounds() {
