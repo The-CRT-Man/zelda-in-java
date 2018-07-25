@@ -135,16 +135,17 @@ public class Controller {
 			screenScroller.tick();
 		}
 		else {
+			
+			if (animateCaveEntrance || animateCaveEntranceFinish) {
+				changeMap(map, true);
+			}
+			
 			player.tick();
 			sword.tick();
 			
 			hearts.clear();
 			
 			hearts = heartManager.tick(false);
-			
-			if (animateCaveEntrance || animateCaveEntranceFinish) {
-				changeMap(map, true);
-			}
 		}
 		
 		tickCount++;
@@ -215,6 +216,8 @@ public class Controller {
 					player.y = (caveEntranceTileLocation[1] + 1) * 64;
 					player.x = caveEntranceTileLocation[0] * 64;
 					player.caveAnimation();
+					
+					player.oldAnimationState = 0;
 					
 					map = 0;
 					
@@ -289,6 +292,9 @@ public class Controller {
 					int[] dungeonEntrancePosition = new int[3];
 					
 					dungeonEntrancePosition = dungeonEntrance();
+					
+					currentScreenX = dungeonEntrancePosition[3];
+					currentScreenY = dungeonEntrancePosition[4];
 					
 					generateTiles();
 					
@@ -553,11 +559,11 @@ public class Controller {
 		// REMEMBER: If the door is on the right, then the player will be walking left, etc!!!
 		
 		String door = "bottom";
-		int[] properties = new int[3];
+		int[] properties = new int[5];
 		
 		if (currentScreenX == 0 && currentScreenY == 0) {
-			currentScreenX = 0;
-			currentScreenY = 1;
+			properties[3] = 0;
+			properties[4] = 1;
 			
 			door = "right";
 		}

@@ -30,7 +30,7 @@ public class Player implements GameObjects {
 	private int animationSpeed = 6;
 	
 	private int animationState;
-	private int oldAnimationState;
+	public int oldAnimationState;
 	private int animationFrame;
 	private boolean animatedState;
 	
@@ -322,11 +322,15 @@ public class Player implements GameObjects {
 		 * 5 = Entrance with Animation 
 		 * 6 = Vertical Slab Collision on Left
 		 * 7 = Vertical Slab Collision on Right
+		 * 8 = 3/4 Block Gap on Top-Left
+		 * 9 = 3/4 Block Gap on Top-Right
+		 * 10 = 3/4 Block Gap on Bottom-Left
+		 * 11 = 3/4 Block Gap on Bottom-Right
 		 */
 		
 		boolean colliding = false;
 		int collisionValue = 0;
-		boolean[] finalCollisionValue = new boolean[8];
+		boolean[] finalCollisionValue = new boolean[12];
 		
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -363,8 +367,14 @@ public class Player implements GameObjects {
 				int[] playerHitbox = {(int) x + 8, (int) y + 8, collisionWidth, collisionHeight};
 				
 				int[] tileHitbox = {(checkX * 64), (checkY * 64), 64, 64};
+				
 				int[] leftVerticalHitbox = {(checkX * 64), (checkY * 64), 32, 64};
 				int[] rightVerticalHitbox = {(checkX * 64) + 32, (checkY * 64), 32, 64};
+				
+				int[] topLeftHitbox = {(checkX * 64), (checkY * 64), 32, 32};
+				int[] topRightHitbox = {(checkX * 64) + 32, (checkY * 64), 32, 32};
+				int[] bottomLeftHitbox = {(checkX * 64), (checkY * 64) + 32, 32, 32};
+				int[] bottomRightHitbox = {(checkX * 64) + 32, (checkY * 64) + 32, 32, 32};
 				
 				if (Collision.isColliding(playerHitbox, tileHitbox) && (collisionValue != 0) && collisionValue != 6 && collisionValue != 7) {
 					colliding = true;
@@ -376,15 +386,36 @@ public class Player implements GameObjects {
 					}
 				}
 				
-				if (Collision.isColliding(playerHitbox, leftVerticalHitbox) && collisionValue != 0 && (collisionValue == 6)) {
+				if (Collision.isColliding(playerHitbox, leftVerticalHitbox) && (collisionValue == 6)) {
 					colliding = true;
 					finalCollisionValue[collisionValue] = true;
 				}
 				
-				if (Collision.isColliding(playerHitbox, rightVerticalHitbox) && collisionValue != 0 && (collisionValue == 7)) {
+				if (Collision.isColliding(playerHitbox, rightVerticalHitbox) && (collisionValue == 7)) {
 					colliding = true;
 					finalCollisionValue[collisionValue] = true;
 				}
+				
+				if (Collision.isColliding(playerHitbox, topLeftHitbox) && collisionValue >= 8 && collisionValue != 8) {
+					colliding = true;
+					finalCollisionValue[1] = true;
+				}
+				
+				if (Collision.isColliding(playerHitbox, topRightHitbox) && collisionValue >= 8 && collisionValue != 9) {
+					colliding = true;
+					finalCollisionValue[1] = true;
+				}
+				
+				if (Collision.isColliding(playerHitbox, bottomLeftHitbox) && collisionValue >= 8 && collisionValue != 10) {
+					colliding = true;
+					finalCollisionValue[1] = true;
+				}
+				
+				if (Collision.isColliding(playerHitbox, bottomRightHitbox) && collisionValue >= 8 && collisionValue != 11) {
+					colliding = true;
+					finalCollisionValue[1] = true;
+				}
+				
 			}
 		}
 		
