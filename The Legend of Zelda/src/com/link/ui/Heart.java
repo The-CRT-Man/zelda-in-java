@@ -1,4 +1,4 @@
-package com.link.entity;
+package com.link.ui;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

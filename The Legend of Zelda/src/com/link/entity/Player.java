@@ -308,7 +308,7 @@ public class Player implements GameObjects {
 		}
 		
 		if (attackCoolDown >= 1) attackCoolDown++;
-		if (attackCoolDown == 15) attackCoolDown = 0;
+		if (attackCoolDown == 10) attackCoolDown = 0;
 	}
 	
 	private void collisionDetection() {

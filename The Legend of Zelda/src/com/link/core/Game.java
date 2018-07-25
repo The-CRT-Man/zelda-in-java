@@ -33,7 +33,9 @@ public class Game extends Canvas implements Runnable {
 	
 	public static BufferedImage linkImg = null;
 	public static BufferedImage swordSheet = null;
+	
 	public static BufferedImage heartSheet = null;
+	public static BufferedImage iconSheet = null;
 	
 	public static BufferedImage tileSet = null;	
 	public static BufferedImage dungeonTileSet = null;
@@ -201,7 +203,9 @@ public class Game extends Canvas implements Runnable {
 			
 			linkImg = loader.loadImage("/link_sheet.png");
 			swordSheet = loader.loadImage("/sword_sheet.png");
+			
 			heartSheet = loader.loadImage("/hearts.png");
+			iconSheet = loader.loadImage("/interface/icons.png");
 			
 			sound = "/overworld.wav";			
 			dungeonMusic = "/dungeon.wav";
