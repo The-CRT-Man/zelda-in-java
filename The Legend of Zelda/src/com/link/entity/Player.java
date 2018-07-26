@@ -50,6 +50,10 @@ public class Player implements GameObjects {
 	
 	private int direction;
 	
+	public int rupees;
+	public int keys;
+	public int bombs;
+	
 	//private int level;
 	
 	private boolean attacking = false;

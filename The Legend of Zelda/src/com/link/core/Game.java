@@ -36,6 +36,7 @@ public class Game extends Canvas implements Runnable {
 	
 	public static BufferedImage heartSheet = null;
 	public static BufferedImage iconSheet = null;
+	public static BufferedImage numbers = null;
 	
 	public static BufferedImage tileSet = null;	
 	public static BufferedImage dungeonTileSet = null;
@@ -206,6 +207,7 @@ public class Game extends Canvas implements Runnable {
 			
 			heartSheet = loader.loadImage("/hearts.png");
 			iconSheet = loader.loadImage("/interface/icons.png");
+			numbers = loader.loadImage("/interface/numbers.png");
 			
 			sound = "/overworld.wav";			
 			dungeonMusic = "/dungeon.wav";
