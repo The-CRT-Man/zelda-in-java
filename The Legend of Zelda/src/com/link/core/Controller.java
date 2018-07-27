@@ -3,6 +3,7 @@ package com.link.core;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
+import com.link.core.function.DroppedItemManager;
 import com.link.core.function.ScreenScroller;
 import com.link.core.function.SoundEffect;
 import com.link.core.function.TileMap;
@@ -63,6 +64,8 @@ public class Controller {
 	
 	public UserInterface ui;
 	
+	public DroppedItemManager droppedItemManager;
+	
 	public int[] caveEntranceTileLocation = {0, 0};
 	
 	public Player player;
@@ -76,6 +79,8 @@ public class Controller {
 	private SoundEffect dungeon;
 	private SoundEffect stairsSound;
 	public SoundEffect swordSound;
+	
+	private Tile caveEntryForegroundTile;
 	
 	public Controller() {
 		generatedTileMap = new TileMap();
@@ -113,7 +118,7 @@ public class Controller {
 		generateTiles();
 		
 		ui = new UserInterface();
-		
+		droppedItemManager = new DroppedItemManager();
 		sword = new Sword();
 	}
 	
@@ -146,6 +151,7 @@ public class Controller {
 			tickCount = 0;
 		}
 		
+		droppedItemManager.tick();
 		ui.tick();
 	}
 	
@@ -165,8 +171,8 @@ public class Controller {
 		player.render(g);
 		
 		if (animateCaveEntrance || animateCaveEntranceFinish) {
-			Tile foreground = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
-			foreground.render(g);
+//			Tile foreground = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
+			caveEntryForegroundTile.render(g);
 		}
 		
 		for (int i = 0; i < tiles.size(); i++) {
@@ -181,6 +187,7 @@ public class Controller {
 		g.drawImage(Game.background, 0, Controller.SCREEN_HEIGHT * 64, null);
 		
 		ui.render(g);
+		droppedItemManager.render(g);
 		
 		g.drawString("Press \"M\" to toggle sound.", 1030, 700);	
 		if (SoundEffect.musicEnabled) g.drawString("PLAYING", 1030, 712);
@@ -310,7 +317,9 @@ public class Controller {
 
 			}
 			
-			
+			if (animateCaveEntrance || animateCaveEntranceFinish) {
+				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
+			}
 		}
 	}
 	
@@ -320,6 +329,8 @@ public class Controller {
 		
 		int yDirection = 0;
 		int xDirection = 0;
+		
+		droppedItemManager.clear();
 			
 		if (scrollScreen || !complete) {
 			previousScreenX = currentScreenX;

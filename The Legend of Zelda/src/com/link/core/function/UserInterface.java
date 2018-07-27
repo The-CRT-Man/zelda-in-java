@@ -42,9 +42,9 @@ public class UserInterface {
 		keyNum = new Number(uiX + 64, uiY + 64, numberSheet);
 		bombNum = new Number(uiX + 64, uiY + 128 -32, numberSheet);
 		
-		rupeeNum.number = 87;
-		keyNum.number = 0;
-		bombNum.number = 3;
+		rupeeNum.number = 999;
+		keyNum.number = 999;
+		bombNum.number = 999;
 	}
 	
 	public void tick() {		

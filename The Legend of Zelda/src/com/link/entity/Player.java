@@ -24,8 +24,8 @@ public class Player implements GameObjects {
 	
 	private boolean slow;
 	
-	private int collisionWidth = 48;
-	private int collisionHeight = 48;
+	public int collisionWidth = 48;
+	public int collisionHeight = 48;
 	
 	private int animationSpeed = 6;
 	
@@ -37,7 +37,7 @@ public class Player implements GameObjects {
 	private int powerUpState;
 	private int shieldState = 0;
 	
-	public int maxHealth = 32;
+	public int maxHealth = 6;
 	public int health = 5;
 	public int[] heartValues = new int[32];
 	
@@ -50,9 +50,11 @@ public class Player implements GameObjects {
 	
 	private int direction;
 	
-	public int rupees;
-	public int keys;
-	public int bombs;
+	public int rupees = 0;
+	public int keys = 0;
+	public int bombs = 0;
+	
+	public int maxBombs = 8;
 	
 	//private int level;
 	
@@ -95,6 +97,7 @@ public class Player implements GameObjects {
 
 		attack();
 		animation();
+		itemManager();
 		
 		float speed;
 		
@@ -467,6 +470,16 @@ public class Player implements GameObjects {
 		if (this.y - (Game.getController().caveEntranceTileLocation[1] * 64) > 64) {
 			Game.getController().animateCaveEntranceDone = false;
 		}
+	}
+	
+	private void itemManager() {
+		if (keys > 255) keys = 255;
+		if (rupees > 255) rupees = 255;
+		if (bombs > maxBombs) bombs = maxBombs;
+		
+		Game.getController().ui.rupeeNum.number = rupees;
+		Game.getController().ui.bombNum.number = bombs;
+		Game.getController().ui.keyNum.number = keys;
 	}
 	
 	public void caveAnimation() {

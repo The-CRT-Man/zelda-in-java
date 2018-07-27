@@ -44,6 +44,8 @@ public class Game extends Canvas implements Runnable {
 	public static BufferedImage dungeonBorderSet = null;
 	public static BufferedImage dungeonDoors = null;
 	
+	public static BufferedImage itemSheet = null;
+	
 	public static BufferedImage icon = null;
 	
 	public static String sound;
@@ -110,7 +112,7 @@ public class Game extends Canvas implements Runnable {
 		init();
 		
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 60.0;
+		double amountOfTicks = 60;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -147,7 +149,8 @@ public class Game extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		
 		if (bs == null) {
-			createBufferStrategy(3);
+			createBufferStrategy(3
+					);
 			return;
 		}
 		
@@ -208,6 +211,8 @@ public class Game extends Canvas implements Runnable {
 			heartSheet = loader.loadImage("/hearts.png");
 			iconSheet = loader.loadImage("/interface/icons.png");
 			numbers = loader.loadImage("/interface/numbers.png");
+			
+			itemSheet = loader.loadImage("/items.png");
 			
 			sound = "/overworld.wav";			
 			dungeonMusic = "/dungeon.wav";
