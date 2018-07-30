@@ -36,6 +36,9 @@ public class DroppedItem {
 	
 	private boolean animated;
 	private boolean despawn;
+	private boolean counting;
+	
+	private int count;
 	
 	public boolean pickedUp = false;
 	
@@ -78,11 +81,20 @@ public class DroppedItem {
 			image = SpriteSheet.grabImage(type, 0, 64, 64, 0, 0, spriteSheet);
 		}
 						
-		collision();
+		if (!counting) collision();
+		
+		if (counting && count < 5) {
+			count++;
+			Game.getController().player.rupees++;
+			Game.getController().pickUpRupee.startSound(false);
+		}
+		else {
+			counting = false;
+		}
 		
 		time++;
 		
-		if (pickedUp) {
+		if (pickedUp && !counting) {
 			Game.getController().droppedItemManager.items[position] = null;
 		}
 		
@@ -92,7 +104,7 @@ public class DroppedItem {
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(image, x, y, null);
+		if (!pickedUp) g.drawImage(image, x, y, null);
 	}
 	
 	private void animation() {
@@ -106,7 +118,7 @@ public class DroppedItem {
 	
 	private void collision() {
 		int[] playerHitbox = {(int) Game.getController().player.x + 8, (int) Game.getController().player.y + 8, Game.getController().player.collisionWidth, Game.getController().player.collisionHeight};
-		int[] itemHitbox = {x, y, 32, 32};
+		int[] itemHitbox = {x, y, 32, 64};
 		
 		boolean colliding = false;
 		
@@ -115,17 +127,32 @@ public class DroppedItem {
 		}
 		
 		if (colliding) {
-			if (type == 0) Game.getController().player.rupees++;
-			if (type == 1) Game.getController().player.rupees += 5;
-			if (type == 2) Game.getController().player.health += 2;
-			if (type == 3) Game.getController().player.bombs++;
-			if (type == 4) Game.getController().player.keys++;
+			if (type == 0) {
+				Game.getController().player.rupees++;
+				Game.getController().pickUpRupee.startSound(false);
+			}
+			if (type == 1) {
+				counting = true;
+			}
+			if (type == 2) { 
+				Game.getController().player.health += 2;
+				Game.getController().pickUpHeart.startSound(false);
+			}
+			if (type == 3) { 
+				Game.getController().player.bombs++;
+				Game.getController().pickUpHeart.startSound(false);
+			}
+			if (type == 4) { 
+				Game.getController().player.keys++;
+				Game.getController().pickUpItem.startSound(false);
+			}
 			//
 			//
 			//
 			if (type == 8) {
 				Game.getController().player.maxHealth += 2;
 				Game.getController().player.health += 2;
+				Game.getController().pickUpItem.startSound(false);
 			}
 		}
 		

@@ -79,6 +79,9 @@ public class Controller {
 	private SoundEffect dungeon;
 	private SoundEffect stairsSound;
 	public SoundEffect swordSound;
+	public SoundEffect pickUpHeart;
+	public SoundEffect pickUpRupee;
+	public SoundEffect pickUpItem;
 	
 	private Tile caveEntryForegroundTile;
 	
@@ -125,7 +128,10 @@ public class Controller {
 	public void musicController() {
 		music = new SoundEffect(Game.sound);		
 		stairsSound = new SoundEffect(Game.stairSound);		
-		swordSound = new SoundEffect(Game.swordSound);		
+		swordSound = new SoundEffect(Game.swordSound);
+		pickUpRupee = new SoundEffect(Game.pickUpRupee);
+		pickUpHeart = new SoundEffect(Game.pickUpHeart);
+		pickUpItem = new SoundEffect(Game.pickUpItem);
 		dungeon = new SoundEffect(Game.dungeonMusic);
 				
 		if (!music.isRunning()) music.startSound(true);

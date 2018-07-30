@@ -53,6 +53,9 @@ public class Game extends Canvas implements Runnable {
 	
 	public static String stairSound;
 	public static String swordSound;
+	public static String pickUpRupee;
+	public static String pickUpHeart;
+	public static String pickUpItem;
 	
 	public static String map;
 	public static String collisionData;
@@ -220,6 +223,10 @@ public class Game extends Canvas implements Runnable {
 			stairSound = "/sound/LOZ_Stairs.wav";
 			
 			swordSound = "/sound/LOZ_Sword_Slash.wav";
+			
+			pickUpRupee = "/sound/LOZ_Get_Rupee.wav";
+			pickUpHeart = "/sound/LOZ_Get_Heart.wav";
+			pickUpItem = "/sound/LOZ_Get_Item.wav";
 
 			map = "/data/map.txt";
 			collisionData = "/data/collision.txt";
