@@ -33,13 +33,18 @@ public class Game extends Canvas implements Runnable {
 	
 	public static BufferedImage linkImg = null;
 	public static BufferedImage swordSheet = null;
+	
 	public static BufferedImage heartSheet = null;
+	public static BufferedImage iconSheet = null;
+	public static BufferedImage numbers = null;
 	
 	public static BufferedImage tileSet = null;	
 	public static BufferedImage dungeonTileSet = null;
 	
 	public static BufferedImage dungeonBorderSet = null;
 	public static BufferedImage dungeonDoors = null;
+	
+	public static BufferedImage itemSheet = null;
 	
 	public static BufferedImage icon = null;
 	
@@ -48,6 +53,9 @@ public class Game extends Canvas implements Runnable {
 	
 	public static String stairSound;
 	public static String swordSound;
+	public static String pickUpRupee;
+	public static String pickUpHeart;
+	public static String pickUpItem;
 	
 	public static String map;
 	public static String collisionData;
@@ -107,7 +115,7 @@ public class Game extends Canvas implements Runnable {
 		init();
 		
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 60.0;
+		double amountOfTicks = 60;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -144,7 +152,8 @@ public class Game extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		
 		if (bs == null) {
-			createBufferStrategy(3);
+			createBufferStrategy(3
+					);
 			return;
 		}
 		
@@ -201,7 +210,12 @@ public class Game extends Canvas implements Runnable {
 			
 			linkImg = loader.loadImage("/link_sheet.png");
 			swordSheet = loader.loadImage("/sword_sheet.png");
+			
 			heartSheet = loader.loadImage("/hearts.png");
+			iconSheet = loader.loadImage("/interface/icons.png");
+			numbers = loader.loadImage("/interface/numbers.png");
+			
+			itemSheet = loader.loadImage("/items.png");
 			
 			sound = "/overworld.wav";			
 			dungeonMusic = "/dungeon.wav";
@@ -209,6 +223,10 @@ public class Game extends Canvas implements Runnable {
 			stairSound = "/sound/LOZ_Stairs.wav";
 			
 			swordSound = "/sound/LOZ_Sword_Slash.wav";
+			
+			pickUpRupee = "/sound/LOZ_Get_Rupee.wav";
+			pickUpHeart = "/sound/LOZ_Get_Heart.wav";
+			pickUpItem = "/sound/LOZ_Get_Item.wav";
 
 			map = "/data/map.txt";
 			collisionData = "/data/collision.txt";

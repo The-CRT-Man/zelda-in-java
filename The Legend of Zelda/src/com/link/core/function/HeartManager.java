@@ -3,8 +3,8 @@ package com.link.core.function;
 import java.util.LinkedList;
 
 import com.link.core.Game;
-import com.link.entity.Heart;
 import com.link.load.SpriteSheet;
+import com.link.ui.Heart;
 
 
 public class HeartManager {

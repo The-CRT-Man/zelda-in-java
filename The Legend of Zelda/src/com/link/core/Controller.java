@@ -3,11 +3,11 @@ package com.link.core;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import com.link.core.function.HeartManager;
+import com.link.core.function.DroppedItemManager;
 import com.link.core.function.ScreenScroller;
 import com.link.core.function.SoundEffect;
 import com.link.core.function.TileMap;
-import com.link.entity.Heart;
+import com.link.core.function.UserInterface;
 import com.link.entity.Player;
 import com.link.entity.Sword;
 import com.link.load.SpriteSheet;
@@ -18,8 +18,6 @@ import com.link.tile.Tile;
 public class Controller {
 	public LinkedList<Tile> tiles = new LinkedList<Tile>();
 	public LinkedList<Tile> scrollTiles = new LinkedList<Tile>();
-	
-	public LinkedList<Heart> hearts = new LinkedList<Heart>();
 
 	public static final int MAP_WIDTH = 16;
 	public static final int MAP_HEIGHT = 8;
@@ -30,8 +28,6 @@ public class Controller {
 	private TileMap generatedTileMap;
 	
 	public int tickCount;
-	
-	public HeartManager heartManager;
 	
 	public int[][][][] tileMap = new int[MAP_WIDTH][MAP_HEIGHT][SCREEN_WIDTH][SCREEN_HEIGHT];
 	public int[][][][] collisionMap = new int[MAP_WIDTH][MAP_HEIGHT][SCREEN_WIDTH][SCREEN_HEIGHT];
@@ -66,6 +62,10 @@ public class Controller {
 	public boolean animateDungeonDoorExit = false;
 	public int animateDungeonDoorExitTickCount;
 	
+	public UserInterface ui;
+	
+	public DroppedItemManager droppedItemManager;
+	
 	public int[] caveEntranceTileLocation = {0, 0};
 	
 	public Player player;
@@ -79,6 +79,11 @@ public class Controller {
 	private SoundEffect dungeon;
 	private SoundEffect stairsSound;
 	public SoundEffect swordSound;
+	public SoundEffect pickUpHeart;
+	public SoundEffect pickUpRupee;
+	public SoundEffect pickUpItem;
+	
+	private Tile caveEntryForegroundTile;
 	
 	public Controller() {
 		generatedTileMap = new TileMap();
@@ -110,21 +115,23 @@ public class Controller {
 	
 	private void generateObjects() {
 		player = new Player();
-		heartManager = new HeartManager();
 		
 		map = 0;
 		
 		generateTiles();
 		
-		hearts = heartManager.tick(true);
-		
+		ui = new UserInterface();
+		droppedItemManager = new DroppedItemManager();
 		sword = new Sword();
 	}
 	
 	public void musicController() {
 		music = new SoundEffect(Game.sound);		
 		stairsSound = new SoundEffect(Game.stairSound);		
-		swordSound = new SoundEffect(Game.swordSound);		
+		swordSound = new SoundEffect(Game.swordSound);
+		pickUpRupee = new SoundEffect(Game.pickUpRupee);
+		pickUpHeart = new SoundEffect(Game.pickUpHeart);
+		pickUpItem = new SoundEffect(Game.pickUpItem);
 		dungeon = new SoundEffect(Game.dungeonMusic);
 				
 		if (!music.isRunning()) music.startSound(true);
@@ -142,10 +149,6 @@ public class Controller {
 			
 			player.tick();
 			sword.tick();
-			
-			hearts.clear();
-			
-			hearts = heartManager.tick(false);
 		}
 		
 		tickCount++;
@@ -153,6 +156,9 @@ public class Controller {
 		if (tickCount == 60) {
 			tickCount = 0;
 		}
+		
+		droppedItemManager.tick();
+		ui.tick();
 	}
 	
 	public void render(Graphics g) {
@@ -171,8 +177,8 @@ public class Controller {
 		player.render(g);
 		
 		if (animateCaveEntrance || animateCaveEntranceFinish) {
-			Tile foreground = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
-			foreground.render(g);
+//			Tile foreground = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
+			caveEntryForegroundTile.render(g);
 		}
 		
 		for (int i = 0; i < tiles.size(); i++) {
@@ -186,13 +192,12 @@ public class Controller {
 		g.drawImage(Game.background, Controller.SCREEN_WIDTH * 64, 0, null);
 		g.drawImage(Game.background, 0, Controller.SCREEN_HEIGHT * 64, null);
 		
-		for (int i = 0; i < player.maxHealth / 2; i++) {
-			hearts.get(i).render(g);
-		}
+		ui.render(g);
+		droppedItemManager.render(g);
 		
-		g.drawString("Press \"M\" to toggle sound.", 1030, 100);	
-		if (SoundEffect.musicEnabled) g.drawString("PLAYING", 1030, 112);
-		if (!SoundEffect.musicEnabled) g.drawString("MUTED", 1030, 112);
+		g.drawString("Press \"M\" to toggle sound.", 1030, 700);	
+		if (SoundEffect.musicEnabled) g.drawString("PLAYING", 1030, 712);
+		if (!SoundEffect.musicEnabled) g.drawString("MUTED", 1030, 712);
 	}
 	
 	public void changeMap(int map, boolean animate) {
@@ -318,7 +323,9 @@ public class Controller {
 
 			}
 			
-			
+			if (animateCaveEntrance || animateCaveEntranceFinish) {
+				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
+			}
 		}
 	}
 	
@@ -328,6 +335,8 @@ public class Controller {
 		
 		int yDirection = 0;
 		int xDirection = 0;
+		
+		droppedItemManager.clear();
 			
 		if (scrollScreen || !complete) {
 			previousScreenX = currentScreenX;
