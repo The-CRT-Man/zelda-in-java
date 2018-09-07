@@ -15,7 +15,7 @@ public class DroppedItemManager {
 	public DroppedItemManager() {
 		itemSheet = Game.itemSheet;
 		
-		addItem(200, 250, 1, true);
+		addItem(200, 250, 8, true);
 	}
 	
 	public void tick() {

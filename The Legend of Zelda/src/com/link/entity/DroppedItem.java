@@ -83,12 +83,11 @@ public class DroppedItem {
 						
 		if (!counting) collision();
 		
-		if (counting && count < 5) {
+		if (counting && count < 5 && tickCount % 2 == 0) {
 			count++;
 			Game.getController().player.rupees++;
-			Game.getController().pickUpRupee.startSound(false);
 		}
-		else {
+		else if (count >= 5) {
 			counting = false;
 		}
 		
@@ -133,6 +132,7 @@ public class DroppedItem {
 			}
 			if (type == 1) {
 				counting = true;
+				Game.getController().pickUpRupee.startSound(false);
 			}
 			if (type == 2) { 
 				Game.getController().player.health += 2;
@@ -146,9 +146,6 @@ public class DroppedItem {
 				Game.getController().player.keys++;
 				Game.getController().pickUpItem.startSound(false);
 			}
-			//
-			//
-			//
 			if (type == 8) {
 				Game.getController().player.maxHealth += 2;
 				Game.getController().player.health += 2;

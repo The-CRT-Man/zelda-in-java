@@ -11,7 +11,7 @@ import com.link.load.SpriteSheet;
 
 public class Player implements GameObjects {
 	public double x = 12 * 64;
-	public double y = 7 * 64;
+	public double y = 12 * 64;
 	
 	private int xVel;
 	private int yVel;
@@ -25,7 +25,7 @@ public class Player implements GameObjects {
 	private boolean slow;
 	
 	public int collisionWidth = 48;
-	public int collisionHeight = 48;
+	public int collisionHeight = 32;
 	
 	private int animationSpeed = 6;
 	
@@ -47,6 +47,8 @@ public class Player implements GameObjects {
 	private int attackCount = 0;
 	private int attackCoolDown = 0;
 	private boolean attackKeyReleased = true;
+	
+	private float speed;
 	
 	private int direction;
 	
@@ -71,6 +73,9 @@ public class Player implements GameObjects {
 		else {
 			oldAnimationState = 4;
 		}
+		
+		x = 512;
+		y = 512;
 	}
 	
 	public void tick() {
@@ -99,23 +104,19 @@ public class Player implements GameObjects {
 		animation();
 		itemManager();
 		
-		float speed;
-		
 		if (slow) {
-			speed = 2;
+			speed = 4;
 		}
 		else {
-			speed = 1;
+			speed = 6;
 		}
 		
 		if ((xVel != 0) && (yVel != 0)) {
 			yVel = 0;
 		}
 		
-		if (tickCount % speed == 0) {
-			x += xVel;
-			y += yVel;
-		}
+		x += xVel;
+		y += yVel;
 		
 		if (tickCount % animationSpeed == 0 && (xVel != 0 || yVel != 0) && animatedState) {
 			if (animationFrame == 0) {
@@ -169,12 +170,12 @@ public class Player implements GameObjects {
 		if (!Game.getController().scrollScreen) g.drawImage(SpriteSheet.grabImage(spriteX, spriteY, 64, 64, 8, 8, Game.linkImg), (int)Math.floor(this.x / 4) * 4, (int)Math.floor(this.y / 4) * 4, null);
 		if (Game.getController().scrollScreen) g.drawImage(SpriteSheet.grabImage(spriteX, spriteY, 64, 64, 8, 8, Game.linkImg), (int)this.x, (int)this.y, null);
 		
-/*		String position = "(" + (int)(x / 4) + ", " + (int)(y / 4) + ")";
+		String position = "(" + (int)(x / 4) + ", " + (int)(y / 4) + ")";
 		String tilePosition = "(" + tileX + ", " + tileY + ")";
 		
 		g.drawString(position, (int)x, (int)y);
 		g.drawString(tilePosition, (int)x, (int)y - 12); 
-*/	}
+	}
 	
 	public void setVelocity(int xVelocity, int yVelocity) {
 		xVel = xVelocity;
@@ -184,20 +185,20 @@ public class Player implements GameObjects {
 	private void keyMovement() {	
 		if (!attacking) {
 			if (KeyInput.keyRight == true) {
-				xVel = 4;
+				xVel = (int) speed;
 			}
 			else if (KeyInput.keyLeft == true) {
-				xVel = -4;
+				xVel = (int) -speed;
 			}
 			else {
 				xVel = 0;
 			}
 			
 			if (KeyInput.keyUp == true) {
-				yVel = -4;
+				yVel = (int) -speed;
 			}
 			else if (KeyInput.keyDown == true) {
-				yVel = 4;
+				yVel = (int) speed;
 			}
 			else {
 				yVel = 0;
@@ -324,7 +325,7 @@ public class Player implements GameObjects {
 		 * 0 = Non-Solid
 		 * 1 = Solid
 		 * 2 = Water
-		 * 3 = No-Ladder Water
+		 * 3 = Horizontal Slab Collision on Top
 		 * 4 = Ladder
 		 * 5 = Entrance with Animation 
 		 * 6 = Vertical Slab Collision on Left
@@ -378,6 +379,8 @@ public class Player implements GameObjects {
 				int[] leftVerticalHitbox = {(checkX * 64), (checkY * 64), 32, 64};
 				int[] rightVerticalHitbox = {(checkX * 64) + 32, (checkY * 64), 32, 64};
 				
+				int[] topHorizontalHitbox = {(checkX * 64), (checkY * 64), 64, 32};
+				
 				int[] topLeftHitbox = {(checkX * 64), (checkY * 64), 32, 32};
 				int[] topRightHitbox = {(checkX * 64) + 32, (checkY * 64), 32, 32};
 				int[] bottomLeftHitbox = {(checkX * 64), (checkY * 64) + 32, 32, 32};
@@ -401,6 +404,11 @@ public class Player implements GameObjects {
 				if (Collision.isColliding(playerHitbox, rightVerticalHitbox) && (collisionValue == 7)) {
 					colliding = true;
 					finalCollisionValue[collisionValue] = true;
+				}
+				
+				if (Collision.isColliding(playerHitbox, topHorizontalHitbox) && (collisionValue == 3)) {
+					colliding = true;
+					finalCollisionValue[1] = true;
 				}
 				
 				if (Collision.isColliding(playerHitbox, topLeftHitbox) && collisionValue >= 8 && collisionValue != 8) {
@@ -429,19 +437,19 @@ public class Player implements GameObjects {
 		if (colliding) {
 			if (finalCollisionValue[1]== true || finalCollisionValue[2] || finalCollisionValue[6] || finalCollisionValue[7]) {
 				if (xVel > 0) {
-					this.x -= 4;
+					this.x -= (int) speed;
 					//xVel = -4;
 				}
 				else if (xVel < 0) {
-					this.x += 4;
+					this.x += (int) speed;
 					//xVel = 4;
 				}
 				else if (yVel > 0) {
-					this.y -=4;
+					this.y -=(int) speed;
 					//yVel = -4;
 				}
 				else if (yVel < 0) {
-					this.y +=4;
+					this.y +=(int) speed;
 					//yVel = 4;
 				}
 			}		
@@ -455,7 +463,8 @@ public class Player implements GameObjects {
 		}
 		
 		if (finalCollisionValue[5] == true && !Game.getController().animateCaveEntrance && !Game.getController().animateCaveEntranceFinish && !Game.getController().animateCaveEntranceDone) {
-			if (this.y == Game.getController().caveEntranceTileLocation[1] * 64) {
+			System.out.println(Game.getController().caveEntranceTileLocation[1]);
+			if (this.y < Game.getController().caveEntranceTileLocation[1] * 64) {
 				if (Game.getController().map == 0) {
 					oldMapX = this.x;
 					oldMapY = this.y;
@@ -499,10 +508,10 @@ public class Player implements GameObjects {
 	public void dungeonDoorAnimation() {
 		Game.getController().animateDungeonDoorExitTickCount++;
 		
-		if (direction == 0) xVel = 4;
-		if (direction == 1) xVel = -4;
-		if (direction == 2) yVel = 4;
-		if (direction == 3) yVel = -4;
+		if (direction == 0) xVel = (int) speed;
+		if (direction == 1) xVel = (int) -speed;
+		if (direction == 2) yVel = (int) speed;
+		if (direction == 3) yVel = (int) -speed;
 		
 		if (Game.getController().animateDungeonDoorExitTickCount > 16) {
 			xVel = 0;
