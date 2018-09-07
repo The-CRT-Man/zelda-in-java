@@ -115,7 +115,7 @@ public class Game extends Canvas implements Runnable {
 		init();
 		
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 60;
+		double amountOfTicks = 50;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -152,8 +152,7 @@ public class Game extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		
 		if (bs == null) {
-			createBufferStrategy(3
-					);
+			createBufferStrategy(3);
 			return;
 		}
 		
