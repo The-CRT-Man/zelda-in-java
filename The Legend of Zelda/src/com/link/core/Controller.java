@@ -109,6 +109,9 @@ public class Controller {
 			}
 		}
 		
+		currentScreenX = 7;
+		currentScreenY = 7;
+		
 		generateObjects();
 		musicController();
 	}
@@ -278,6 +281,10 @@ public class Controller {
 				
 				player.x = (double)480;
 				player.y = (double)576;
+			}
+			
+			if (animateCaveEntrance || animateCaveEntranceFinish) {
+				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
 			}
 		}
 		else if (this.map == 2) {
@@ -556,8 +563,8 @@ public class Controller {
 		if (oldX == 0 && oldY == 1 && newX == 1 && newY == 1) {
 			exitProperties = true;
 			
-			currentScreenX = 0;
-			currentScreenY = 0;
+			currentScreenX = 7;
+			currentScreenY = 7;
 		}
 		
 		return exitProperties;
@@ -570,11 +577,14 @@ public class Controller {
 		String door = "bottom";
 		int[] properties = new int[5];
 		
-		if (currentScreenX == 0 && currentScreenY == 0) {
+		if (currentScreenX == 7 && currentScreenY == 7) {
 			properties[3] = 0;
 			properties[4] = 1;
 			
 			door = "right";
+		}
+		else {
+			changeMap(0, false);
 		}
 		
 		if (door == "right") {
