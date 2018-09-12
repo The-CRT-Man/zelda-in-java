@@ -18,6 +18,8 @@ public class TileMap {
 	private int[][][][] dungeonForegroundData = new int[Controller.MAP_WIDTH][Controller.MAP_HEIGHT][Controller.SCREEN_WIDTH][Controller.SCREEN_HEIGHT];
 	private int[][][][] dungeonCollisionTileData = new int[Controller.MAP_WIDTH][Controller.MAP_HEIGHT][Controller.SCREEN_WIDTH][Controller.SCREEN_HEIGHT];
 
+	private String[] messages;
+	
 	public int[][][][] getTileData() {
 		return tileData;
 	}
@@ -61,6 +63,8 @@ public class TileMap {
 		
 		int[][] dungeonForegroundList = gtm.getTileListFromTextFile(Game.dungeonForegroundMap);
 		this.setDungeonForegroundData(gtm.getTileMap(dungeonForegroundList));
+		
+		messages = gtm.getTextFromTextFile(Game.messages);
 	}
 	
 	public void randomiseCollisionData() {
@@ -79,6 +83,10 @@ public class TileMap {
 
 	public int[][][][] getDungeonTileData() {
 		return dungeonTileData;
+	}
+	
+	public String[] getMessgaes() {
+		return messages;
 	}
 
 	public void setDungeonTileData(int[][][][] dungeonTileData) {

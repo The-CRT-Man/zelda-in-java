@@ -170,11 +170,11 @@ public class Player implements GameObjects {
 		if (!Game.getController().scrollScreen) g.drawImage(SpriteSheet.grabImage(spriteX, spriteY, 64, 64, 8, 8, Game.linkImg), (int)Math.floor(this.x / 4) * 4, (int)Math.floor(this.y / 4) * 4, null);
 		if (Game.getController().scrollScreen) g.drawImage(SpriteSheet.grabImage(spriteX, spriteY, 64, 64, 8, 8, Game.linkImg), (int)this.x, (int)this.y, null);
 		
-		String position = "(" + (int)(x / 4) + ", " + (int)(y / 4) + ")";
-		String tilePosition = "(" + tileX + ", " + tileY + ")";
+//      String position = "(" + (int)(x / 4) + ", " + (int)(y / 4) + ")";
+//		String tilePosition = "(" + tileX + ", " + tileY + ")";
 		
-		g.drawString(position, (int)x, (int)y);
-		g.drawString(tilePosition, (int)x, (int)y - 12); 
+//		g.drawString(position, (int)x, (int)y);
+//		g.drawString(tilePosition, (int)x, (int)y - 12); 
 	}
 	
 	public void setVelocity(int xVelocity, int yVelocity) {
@@ -468,7 +468,7 @@ public class Player implements GameObjects {
 				if (Game.getController().map == 0) {
 					oldMapX = this.x;
 					oldMapY = this.y;
-					Game.getController().changeMap(2, true);
+					Game.getController().changeMap(Game.getController().enterSubMap(), true);
 				}
 				else if (Game.getController().map == 1) {
 					Game.getController().changeMap(0, true);

@@ -36,7 +36,9 @@ public class Game extends Canvas implements Runnable {
 	
 	public static BufferedImage heartSheet = null;
 	public static BufferedImage iconSheet = null;
+	
 	public static BufferedImage numbers = null;
+	public static BufferedImage alphabet = null;
 	
 	public static BufferedImage tileSet = null;	
 	public static BufferedImage dungeonTileSet = null;
@@ -65,6 +67,8 @@ public class Game extends Canvas implements Runnable {
 	public static String dungeonMap;
 	public static String dungeonForegroundMap;
 	public static String dungeonCollisionData;
+	
+	public static String messages;
 
 	private static Controller controller;
 	
@@ -212,7 +216,9 @@ public class Game extends Canvas implements Runnable {
 			
 			heartSheet = loader.loadImage("/hearts.png");
 			iconSheet = loader.loadImage("/interface/icons.png");
+			
 			numbers = loader.loadImage("/interface/numbers.png");
+			alphabet = loader.loadImage("/interface/alphabet.png");
 			
 			itemSheet = loader.loadImage("/items.png");
 			
@@ -235,6 +241,8 @@ public class Game extends Canvas implements Runnable {
 			dungeonCollisionData = "/data/collision_dungeon.txt";
 			
 			caveMap = "/data/cave_map.txt";
+			
+			messages = "/data/text.txt";
 		}
 		catch (Exception e) {
 			e.printStackTrace();
