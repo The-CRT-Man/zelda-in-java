@@ -4,10 +4,13 @@ import java.awt.Rectangle;
 
 public class Collision {
 	public static boolean isColliding(int[] ob1Hitbox, int[] ob2Hitbox) {
-		if (toRectangle(ob1Hitbox).intersects(toRectangle(ob2Hitbox))) {
-		      return true;
-		    }
-		    return false;
+		Rectangle ob1Rect = toRectangle(ob1Hitbox);
+		Rectangle ob2Rect = toRectangle(ob2Hitbox);
+		
+		if (ob1Rect.intersects(ob2Rect)) {
+			return true;
+	    }
+	    return false;
 	}
 	
 	private static Rectangle toRectangle(int[] hitbox) {

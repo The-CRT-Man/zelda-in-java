@@ -25,7 +25,7 @@ public class Player implements GameObjects {
 	private boolean slow;
 	
 	public int collisionWidth = 48;
-	public int collisionHeight = 32;
+	public int collisionHeight = 48;
 	
 	private int animationSpeed = 6;
 	
@@ -406,27 +406,27 @@ public class Player implements GameObjects {
 					finalCollisionValue[collisionValue] = true;
 				}
 				
-				if (Collision.isColliding(playerHitbox, topHorizontalHitbox) && (collisionValue == 3)) {
+				if (Collision.isColliding(playerHitbox, topHorizontalHitbox) && (collisionValue == 3 || collisionValue == 2)) {
 					colliding = true;
 					finalCollisionValue[1] = true;
 				}
 				
-				if (Collision.isColliding(playerHitbox, topLeftHitbox) && collisionValue >= 8 && collisionValue != 8) {
+				if (Collision.isColliding(playerHitbox, bottomRightHitbox) && collisionValue == 8) {
 					colliding = true;
 					finalCollisionValue[1] = true;
 				}
 				
-				if (Collision.isColliding(playerHitbox, topRightHitbox) && collisionValue >= 8 && collisionValue != 9) {
+				if (Collision.isColliding(playerHitbox, bottomLeftHitbox) && collisionValue == 9) {
 					colliding = true;
 					finalCollisionValue[1] = true;
 				}
 				
-				if (Collision.isColliding(playerHitbox, bottomLeftHitbox) && collisionValue >= 8 && collisionValue != 10) {
+				if (Collision.isColliding(playerHitbox, topRightHitbox) && collisionValue == 10) {
 					colliding = true;
 					finalCollisionValue[1] = true;
 				}
 				
-				if (Collision.isColliding(playerHitbox, bottomRightHitbox) && collisionValue >= 8 && collisionValue != 11) {
+				if (Collision.isColliding(playerHitbox, topLeftHitbox) && collisionValue == 11) {
 					colliding = true;
 					finalCollisionValue[1] = true;
 				}
@@ -435,7 +435,7 @@ public class Player implements GameObjects {
 		}
 		
 		if (colliding) {
-			if (finalCollisionValue[1]== true || finalCollisionValue[2] || finalCollisionValue[6] || finalCollisionValue[7]) {
+			if (finalCollisionValue[1] || finalCollisionValue[6] || finalCollisionValue[7]) {
 				if (xVel > 0) {
 					this.x -= (int) speed;
 					//xVel = -4;
@@ -445,11 +445,11 @@ public class Player implements GameObjects {
 					//xVel = 4;
 				}
 				else if (yVel > 0) {
-					this.y -=(int) speed;
+					this.y -= (int) speed;
 					//yVel = -4;
 				}
 				else if (yVel < 0) {
-					this.y +=(int) speed;
+					this.y += (int) speed;
 					//yVel = 4;
 				}
 			}		
