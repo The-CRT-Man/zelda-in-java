@@ -7,13 +7,13 @@ import com.link.core.function.DroppedItemManager;
 import com.link.core.function.ScreenScroller;
 import com.link.core.function.SoundEffect;
 import com.link.core.function.TileMap;
-import com.link.core.function.UserInterface;
 import com.link.entity.Player;
 import com.link.entity.Sword;
 import com.link.load.SpriteSheet;
 import com.link.tile.LevelTile;
 import com.link.tile.ScrollTile;
 import com.link.tile.Tile;
+import com.link.ui.UserInterface;
 
 public class Controller {
 	public LinkedList<Tile> tiles = new LinkedList<Tile>();
@@ -40,6 +40,8 @@ public class Controller {
 	public int[][][][] dungeonCollisionMap = new int[MAP_WIDTH][MAP_HEIGHT][SCREEN_WIDTH][SCREEN_HEIGHT];
 	
 	public int[][] dungeonBorderMap = new int[MAP_WIDTH][MAP_HEIGHT];
+	
+	public String[] messages;
 	
 	public int currentScreenX = 0;
 	public int currentScreenY = 0;
@@ -101,6 +103,8 @@ public class Controller {
 		this.dungeonCollisionMap = generatedTileMap.getDungeonCollisionTileData();
 		
 		this.dungeonDoors = generatedTileMap.getDungeonForegroundData();
+		
+		messages = generatedTileMap.getMessgaes();
 		
 		
 		for (int i = 0; i < Controller.SCREEN_HEIGHT; i++) {
@@ -195,6 +199,9 @@ public class Controller {
 		g.drawImage(Game.background, Controller.SCREEN_WIDTH * 64, 0, null);
 		g.drawImage(Game.background, 0, Controller.SCREEN_HEIGHT * 64, null);
 		
+		g.drawString(String.valueOf(currentScreenX), 1200, 500);
+		g.drawString(String.valueOf(currentScreenY), 1200, 550);
+		
 		ui.render(g);
 		droppedItemManager.render(g);
 		
@@ -228,6 +235,8 @@ public class Controller {
 					player.oldAnimationState = 0;
 					
 					map = 0;
+	
+					Game.getController().caveText = "";
 					
 					generateTiles();
 				}
@@ -243,13 +252,23 @@ public class Controller {
 					animateCaveEntranceDone = true;
 					
 					music.startSound(true);
+
 					dungeon.stopSound();
 				}
 			}
 			else {
 				map = 0;
 				
+				music.startSound(true);
+				
+				player.y = (caveEntranceTileLocation[1] + 1) * 64;
+				player.x = caveEntranceTileLocation[0] * 64;
+				
 				generateTiles();
+				
+				dungeon.stopSound();
+				
+				Game.getController().caveText = "";
 			}
 		}
 		
@@ -264,6 +283,8 @@ public class Controller {
 				}
 				else if (animateCaveEntrance && !animateCaveEntranceFinish) {
 					player.caveAnimation();
+					
+					ui.displayMessage(true);
 				}
 				else if (animateCaveEntranceFinish && !animateCaveEntrance) {
 					generateTiles();
@@ -370,6 +391,7 @@ public class Controller {
 		scrollTiles.clear();
 		
 		if (map == 1) {
+			currentScreenY--;
 			changeMap(0, true);
 			return;
 		}
@@ -563,11 +585,36 @@ public class Controller {
 		if (oldX == 0 && oldY == 1 && newX == 1 && newY == 1) {
 			exitProperties = true;
 			
-			currentScreenX = 7;
-			currentScreenY = 7;
+			currentScreenX = 6;
+			currentScreenY = 6;
 		}
 		
 		return exitProperties;
+	}
+	
+	public String caveText = "";
+	
+	public int enterSubMap() {
+		int map = 1;
+		
+		if (currentScreenX == 6 && currentScreenY == 6) {
+			map = 2;
+		}
+		
+		if (map == 1) {
+			int screen = ((currentScreenY - 1) * MAP_WIDTH) + currentScreenX;
+			
+			switch (screen) {
+			case 103:
+				caveText = messages[0];
+				break;
+			case 84:
+				caveText = messages[1];
+				break;
+			}
+		}
+		
+		return map;
 	}
 	
 	private int[] dungeonEntrance() {
@@ -577,7 +624,7 @@ public class Controller {
 		String door = "bottom";
 		int[] properties = new int[5];
 		
-		if (currentScreenX == 7 && currentScreenY == 7) {
+		if (currentScreenX == 6 && currentScreenY == 6) {
 			properties[3] = 0;
 			properties[4] = 1;
 			

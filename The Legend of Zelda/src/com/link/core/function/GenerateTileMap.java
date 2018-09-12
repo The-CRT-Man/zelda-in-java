@@ -57,6 +57,30 @@ public class GenerateTileMap {
 		return tiles;
 	}
 	
+	public String[] getTextFromTextFile(String fileName) {
+		String[] text = new String[200];
+		
+		TextFileLoader fileLoader = new TextFileLoader();
+		
+		try {
+			BufferedReader bufferedReader = fileLoader.loadFile(fileName);
+			
+			for (int i = 0; i < text.length; i++) {
+				text[i] = bufferedReader.readLine();
+			}
+			
+			bufferedReader.close();
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return text;
+	}
+	
 	public int[] getCollisionDataFromTextFile(String fileName, int length) {
 		int[] collision = new int[length];
 		

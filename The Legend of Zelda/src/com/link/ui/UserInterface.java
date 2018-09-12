@@ -1,13 +1,11 @@
-package com.link.core.function;
+package com.link.ui;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 import com.link.core.Game;
-import com.link.ui.Heart;
-import com.link.ui.Icon;
-import com.link.ui.Number;
+import com.link.core.function.HeartManager;
 
 public class UserInterface {
 	public HeartManager heartManager;
@@ -24,12 +22,16 @@ public class UserInterface {
 	public BufferedImage iconSheet;
 	public BufferedImage numberSheet;
 	
+	private StringUI message;
+	
 	public int uiX = 1028;
 	public int uiY = 80;
 	
 	public UserInterface() {
 		heartManager = new HeartManager();
 		hearts = heartManager.tick(true);
+		
+		message = new StringUI("", 3 * 64, 5 * 32);
 		
 		iconSheet = Game.iconSheet;
 		numberSheet = Game.numbers;
@@ -58,6 +60,9 @@ public class UserInterface {
 		rupeeIcon.tick();
 		keyIcon.tick();
 		bombIcon.tick();
+		
+		message.tick();
+		message.setMessage(Game.getController().caveText);
 	}
 	
 	public void render(Graphics g) {	
@@ -72,5 +77,14 @@ public class UserInterface {
 		rupeeNum.render(g);
 		bombNum.render(g);
 		keyNum.render(g);
+		
+		if (message.display) message.render(g);
+	}
+	
+	public void displayMessage(boolean display) {
+		message.display = display;
+		
+		message.tickCount = 0;
+		message.secondCount = 0;
 	}
 }
