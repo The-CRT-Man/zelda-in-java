@@ -3,6 +3,7 @@ package com.link.entity;
 import java.awt.Graphics;
 import java.util.Random;
 
+import com.link.core.Controller;
 import com.link.core.Game;
 import com.link.core.function.Collision;
 import com.link.core.function.KeyInput;
@@ -386,6 +387,8 @@ public class Player implements GameObjects {
 				int[] bottomLeftHitbox = {(checkX * 64), (checkY * 64) + 32, 32, 32};
 				int[] bottomRightHitbox = {(checkX * 64) + 32, (checkY * 64) + 32, 32, 32};
 				
+				int[] caveHitbox = {0, 0, Controller.SCREEN_WIDTH * 64, 6 * 64};
+				
 				if (Collision.isColliding(playerHitbox, tileHitbox) && (collisionValue != 0) && collisionValue != 6 && collisionValue != 7) {
 					colliding = true;
 					finalCollisionValue[collisionValue] = true;
@@ -396,10 +399,16 @@ public class Player implements GameObjects {
 					}
 				}
 				
+				if (Collision.isColliding(playerHitbox, caveHitbox) && Game.getController().map == 1) {
+					colliding = true;
+					finalCollisionValue[1] = true;
+				}
+				
 				if (Collision.isColliding(playerHitbox, leftVerticalHitbox) && (collisionValue == 6)) {
 					colliding = true;
 					finalCollisionValue[collisionValue] = true;
 				}
+				
 				
 				if (Collision.isColliding(playerHitbox, rightVerticalHitbox) && (collisionValue == 7)) {
 					colliding = true;

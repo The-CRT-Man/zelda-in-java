@@ -7,6 +7,8 @@ import com.link.core.function.DroppedItemManager;
 import com.link.core.function.ScreenScroller;
 import com.link.core.function.SoundEffect;
 import com.link.core.function.TileMap;
+import com.link.entity.Entity;
+import com.link.entity.OldMan;
 import com.link.entity.Player;
 import com.link.entity.Sword;
 import com.link.load.SpriteSheet;
@@ -18,6 +20,8 @@ import com.link.ui.UserInterface;
 public class Controller {
 	public LinkedList<Tile> tiles = new LinkedList<Tile>();
 	public LinkedList<Tile> scrollTiles = new LinkedList<Tile>();
+	
+	public LinkedList<Entity> npcs = new LinkedList<Entity>();
 
 	public static final int MAP_WIDTH = 16;
 	public static final int MAP_HEIGHT = 8;
@@ -196,6 +200,10 @@ public class Controller {
 			if (scrollTiles.get(i).layer == LevelTile.FOREGROUND) scrollTiles.get(i).render(g);
 		}
 		
+		for (int i = 0; i < npcs.size(); i++) {
+			npcs.get(i).render(g);
+		}
+		
 		g.drawImage(Game.background, Controller.SCREEN_WIDTH * 64, 0, null);
 		g.drawImage(Game.background, 0, Controller.SCREEN_HEIGHT * 64, null);
 		
@@ -233,11 +241,8 @@ public class Controller {
 					player.caveAnimation();
 					
 					player.oldAnimationState = 0;
-					
-					map = 0;
 	
-					Game.getController().caveText = "";
-					
+					clearScreen(map);				
 					generateTiles();
 				}
 				else if (animateCaveEntrance && !animateCaveEntranceFinish) {
@@ -246,7 +251,7 @@ public class Controller {
 				else if (animateCaveEntranceFinish && !animateCaveEntrance) {
 					player.y = caveEntranceTileLocation[1] * 64;
 					player.x = caveEntranceTileLocation[0] * 64;
-					
+														
 					animateCaveEntranceFinish = false;
 					animateCaveEntrance = false;
 					animateCaveEntranceDone = true;
@@ -265,10 +270,9 @@ public class Controller {
 				player.x = caveEntranceTileLocation[0] * 64;
 				
 				generateTiles();
+				clearScreen(map);
 				
-				dungeon.stopSound();
-				
-				Game.getController().caveText = "";
+				dungeon.stopSound();			
 			}
 		}
 		
@@ -288,7 +292,11 @@ public class Controller {
 				}
 				else if (animateCaveEntranceFinish && !animateCaveEntrance) {
 					generateTiles();
+					clearScreen(map);
 					
+					for (Entity man : npcs) {
+						man.setVisible(true);
+					}
 					
 					player.x = (double)480;
 					player.y = (double)576;
@@ -330,6 +338,7 @@ public class Controller {
 					currentScreenY = dungeonEntrancePosition[4];
 					
 					generateTiles();
+					clearScreen(map);
 					
 					player.x = (double)dungeonEntrancePosition[1];
 					player.y = (double)dungeonEntrancePosition[2];
@@ -364,7 +373,7 @@ public class Controller {
 		int yDirection = 0;
 		int xDirection = 0;
 		
-		droppedItemManager.clear();
+		clearScreen(map);
 			
 		if (scrollScreen || !complete) {
 			previousScreenX = currentScreenX;
@@ -594,6 +603,7 @@ public class Controller {
 	
 	public String caveText = "";
 	
+	// Run by Player in collision detection!!
 	public int enterSubMap() {
 		int map = 1;
 		
@@ -607,9 +617,11 @@ public class Controller {
 			switch (screen) {
 			case 103:
 				caveText = messages[0];
+				npcs.add(new OldMan(200, 200));
 				break;
 			case 84:
 				caveText = messages[1];
+				npcs.add(new OldMan(400, 200));
 				break;
 			}
 		}
@@ -656,6 +668,12 @@ public class Controller {
 		}
 		
 		return properties;
+	}
+	
+	private void clearScreen(int map) {
+		if (map != 1) Game.getController().caveText = "";
+		droppedItemManager.clear();
+		if (map != 1) npcs.clear();
 	}
 	
 	public void stopSounds() {

@@ -222,6 +222,8 @@ public class Game extends Canvas implements Runnable {
 			
 			itemSheet = loader.loadImage("/items.png");
 			
+			testTileImg = loader.loadImage("/icon.png");
+			
 			sound = "/overworld.wav";			
 			dungeonMusic = "/dungeon.wav";
 			
