@@ -50,7 +50,6 @@ public class UserInterface {
 	}
 	
 	public void tick() {		
-		hearts.clear();		
 		hearts = heartManager.tick(false);
 		
 		rupeeNum.tick();

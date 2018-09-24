@@ -19,7 +19,9 @@ public class Game extends Canvas implements Runnable {
 	
 	private static JFrame frame;
 	private Thread thread;
-	private boolean running = false;
+	//private Thread renderThread;
+	public boolean running = false;
+	public boolean isTicking = false;
 	
 	public static final String TITLE = "The Legend of Zelda";
 	public static final int WIDTH = 1280;
@@ -42,6 +44,8 @@ public class Game extends Canvas implements Runnable {
 	
 	public static BufferedImage tileSet = null;	
 	public static BufferedImage dungeonTileSet = null;
+	
+	public static BufferedImage npcSheet = null;
 	
 	public static BufferedImage dungeonBorderSet = null;
 	public static BufferedImage dungeonDoors = null;
@@ -119,7 +123,7 @@ public class Game extends Canvas implements Runnable {
 		init();
 		
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 50;
+		double amountOfTicks = 60;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -131,10 +135,12 @@ public class Game extends Canvas implements Runnable {
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while(delta >= 1){
+				isTicking = true;
 				tick();
 				updates++;
 				delta--;
 			}
+			isTicking = false;
 			render();
 			frames++;
 					
@@ -152,7 +158,7 @@ public class Game extends Canvas implements Runnable {
 		controller.tick();
 	}
 	
-	private void render() {
+	public void render() {
 		BufferStrategy bs = getBufferStrategy();
 		
 		if (bs == null) {
@@ -178,7 +184,9 @@ public class Game extends Canvas implements Runnable {
 		
 		this.running = true;
 		this.thread = new Thread(this);
+		//this.renderThread = new Thread(new Render(this));
 		this.thread.start();
+		//this.renderThread.start();
 	}
 	
 	// Starting the thread
@@ -219,6 +227,8 @@ public class Game extends Canvas implements Runnable {
 			
 			numbers = loader.loadImage("/interface/numbers.png");
 			alphabet = loader.loadImage("/interface/alphabet.png");
+			
+			npcSheet = loader.loadImage("/entity/npc.png");
 			
 			itemSheet = loader.loadImage("/items.png");
 			

@@ -8,7 +8,7 @@ import com.link.core.function.ScreenScroller;
 import com.link.core.function.SoundEffect;
 import com.link.core.function.TileMap;
 import com.link.entity.Entity;
-import com.link.entity.OldMan;
+import com.link.entity.NPC;
 import com.link.entity.Player;
 import com.link.entity.Sword;
 import com.link.load.SpriteSheet;
@@ -180,6 +180,10 @@ public class Controller {
 		for (int i = 0; i < scrollTiles.size(); i++) {
 			if (scrollTiles.get(i).layer == LevelTile.BACKGROUND) scrollTiles.get(i).render(g);
 		}
+		
+		for (int i = 0; i < npcs.size(); i++) {
+			npcs.get(i).render(g);
+		}
 			
 		if (sword.isAttacking) {
 			sword.render(g);
@@ -188,7 +192,6 @@ public class Controller {
 		player.render(g);
 		
 		if (animateCaveEntrance || animateCaveEntranceFinish) {
-//			Tile foreground = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
 			caveEntryForegroundTile.render(g);
 		}
 		
@@ -199,11 +202,7 @@ public class Controller {
 		for (int i = 0; i < scrollTiles.size(); i++) {
 			if (scrollTiles.get(i).layer == LevelTile.FOREGROUND) scrollTiles.get(i).render(g);
 		}
-		
-		for (int i = 0; i < npcs.size(); i++) {
-			npcs.get(i).render(g);
-		}
-		
+			
 		g.drawImage(Game.background, Controller.SCREEN_WIDTH * 64, 0, null);
 		g.drawImage(Game.background, 0, Controller.SCREEN_HEIGHT * 64, null);
 		
@@ -617,11 +616,11 @@ public class Controller {
 			switch (screen) {
 			case 103:
 				caveText = messages[0];
-				npcs.add(new OldMan(200, 200));
+				npcs.add(new NPC(15 * 32, 4 * 64, "oldMan"));
 				break;
 			case 84:
 				caveText = messages[1];
-				npcs.add(new OldMan(400, 200));
+				npcs.add(new NPC(15 * 32, 4 * 64, "oldWoman"));
 				break;
 			}
 		}

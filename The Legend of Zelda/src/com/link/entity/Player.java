@@ -387,7 +387,7 @@ public class Player implements GameObjects {
 				int[] bottomLeftHitbox = {(checkX * 64), (checkY * 64) + 32, 32, 32};
 				int[] bottomRightHitbox = {(checkX * 64) + 32, (checkY * 64) + 32, 32, 32};
 				
-				int[] caveHitbox = {0, 0, Controller.SCREEN_WIDTH * 64, 6 * 64};
+				int[] caveHitbox = {0, 0, Controller.SCREEN_WIDTH * 64, 5 * 64};
 				
 				if (Collision.isColliding(playerHitbox, tileHitbox) && (collisionValue != 0) && collisionValue != 6 && collisionValue != 7) {
 					colliding = true;
@@ -472,7 +472,6 @@ public class Player implements GameObjects {
 		}
 		
 		if (finalCollisionValue[5] == true && !Game.getController().animateCaveEntrance && !Game.getController().animateCaveEntranceFinish && !Game.getController().animateCaveEntranceDone) {
-			System.out.println(Game.getController().caveEntranceTileLocation[1]);
 			if (this.y < Game.getController().caveEntranceTileLocation[1] * 64) {
 				if (Game.getController().map == 0) {
 					oldMapX = this.x;
