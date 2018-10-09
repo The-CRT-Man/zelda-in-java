@@ -3,6 +3,7 @@ package com.link.tile;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import com.link.core.Game;
 import com.link.interfaces.GameTiles;
 
 public class Tile implements GameTiles{
@@ -13,12 +14,14 @@ public class Tile implements GameTiles{
 	
 	public int scrollDirection;
 	
+	public boolean renderOffScreen;
+	
 	public int layer;
 	
 	public BufferedImage image;
 	
 	public void render(Graphics g) {
-		g.drawImage(image, (int)x, (int)y, null);
+		if ((x >= -64 && x < Game.WIDTH && y >= -64 && y < Game.HEIGHT) || renderOffScreen) g.drawImage(image, (int)x, (int)y, null);
 	}
 	
 	public void tick() {

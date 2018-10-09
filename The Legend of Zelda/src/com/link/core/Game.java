@@ -19,9 +19,11 @@ public class Game extends Canvas implements Runnable {
 	
 	private static JFrame frame;
 	private Thread thread;
-	//private Thread renderThread;
+	private Thread renderThread;
 	public boolean running = false;
 	public boolean isTicking = false;
+	
+	public int renderUpdates;
 	
 	public static final String TITLE = "The Legend of Zelda";
 	public static final int WIDTH = 1280;
@@ -142,12 +144,13 @@ public class Game extends Canvas implements Runnable {
 			}
 			isTicking = false;
 			render();
-			frames++;
+			renderUpdates++;
+			frames = renderUpdates;
 					
 			if (System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
 				System.out.println("FRAMES: " + frames + " TICKS: " + updates);
-				frames = 0;
+				renderUpdates = 0;
 				updates = 0;
 			}
 		}
@@ -168,7 +171,12 @@ public class Game extends Canvas implements Runnable {
 		
 		Graphics g = bs.getDrawGraphics();
 		
-		controller.render(g);
+		try { 
+			controller.render(g);
+		}
+		catch (NullPointerException e) {
+			System.err.println("Failed to render controller");
+		}
 		
 		g.drawString("The Legend of Zelda, remade in Java. Art, music and game design are copyrights of Nintendo.", 7, 720);
 		
@@ -184,9 +192,9 @@ public class Game extends Canvas implements Runnable {
 		
 		this.running = true;
 		this.thread = new Thread(this);
-		//this.renderThread = new Thread(new Render(this));
+//		this.renderThread = new Thread(new Render(this));
 		this.thread.start();
-		//this.renderThread.start();
+//		this.renderThread.start();
 	}
 	
 	// Starting the thread
@@ -262,7 +270,7 @@ public class Game extends Canvas implements Runnable {
 		
 		controller = new Controller();
 		
-		addKeyListener(new KeyInput(controller));		
+		addKeyListener(new KeyInput(controller));
 	}
 	
 	public static Controller getController() {

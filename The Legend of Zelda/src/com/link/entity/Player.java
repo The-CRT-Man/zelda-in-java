@@ -59,6 +59,8 @@ public class Player implements GameObjects {
 	
 	public int maxBombs = 8;
 	
+	private boolean holdingItem;
+	
 	//private int level;
 	
 	private boolean attacking = false;
@@ -118,6 +120,8 @@ public class Player implements GameObjects {
 		
 		x += xVel;
 		y += yVel;
+		
+		snapping();
 		
 		if (tickCount % animationSpeed == 0 && (xVel != 0 || yVel != 0) && animatedState) {
 			if (animationFrame == 0) {
@@ -183,6 +187,19 @@ public class Player implements GameObjects {
 		yVel = yVelocity;
 	}
 	
+	private void snapping() {
+		double halfTilePosition;
+		
+		if (direction == 0 || direction == 1) { // Moving left or right
+			halfTilePosition = y / 32;
+			y = Math.round(halfTilePosition) * 32;
+		}
+		else if (direction == 2 || direction == 3) {
+			halfTilePosition = x / 32;
+			x = Math.round(halfTilePosition) * 32;
+		}
+	}
+	
 	private void keyMovement() {	
 		if (!attacking) {
 			if (KeyInput.keyRight == true) {
@@ -222,7 +239,7 @@ public class Player implements GameObjects {
 	
 	private void animation() {
 		if (xVel > 0) direction = 0;
-		if (xVel < 0) direction = 1;		
+		if (xVel < 0) direction = 1;
 		if (yVel > 0) direction = 2;
 		if (yVel < 0) direction = 3;
 		
@@ -282,7 +299,12 @@ public class Player implements GameObjects {
 				}
 			}
 			
-			animatedState = true;	
+			animatedState = true;
+			
+			if (holdingItem) {
+				animatedState = false;
+				animationState = 9;
+			}
 		}
 		else {
 			if (powerUpState == 0 && direction == 3) {
@@ -373,7 +395,7 @@ public class Player implements GameObjects {
 					}
 				}
 				
-				int[] playerHitbox = {(int) x + 8, (int) y + 8, collisionWidth, collisionHeight};
+				int[] playerHitbox = {(int) x, (int) y, 64, 64};
 				
 				int[] tileHitbox = {(checkX * 64), (checkY * 64), 64, 64};
 				
@@ -546,6 +568,10 @@ public class Player implements GameObjects {
 			
 			heartValues[i] = heartValue;
 		}
+	}
+	
+	public void grandItemPickup() {
+		
 	}
 	
 	public int getVelocityX() {

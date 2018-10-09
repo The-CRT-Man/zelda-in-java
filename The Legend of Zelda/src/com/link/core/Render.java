@@ -8,9 +8,8 @@ public class Render implements Runnable {
 		this.g = g;
 	}
 	
+	@Override
 	public void run() {
-		System.out.println("Hello from another thread");
-		
 		try {
 			Thread.sleep(1000);
 		} 
@@ -20,8 +19,10 @@ public class Render implements Runnable {
 		
 		while (g.running) {
 			if (!g.isTicking) {
-				g.render();			
+				g.render();
 			}
+			
+			g.renderUpdates++;
 		}
 	}
 }

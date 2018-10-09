@@ -174,15 +174,30 @@ public class Controller {
 	
 	public void render(Graphics g) {
 		for (int i = 0; i < tiles.size(); i++) {
-			if (tiles.get(i).layer == LevelTile.BACKGROUND) tiles.get(i).render(g);
+			try {
+				if (tiles.get(i).layer == LevelTile.BACKGROUND) tiles.get(i).render(g);
+			}
+			catch (NullPointerException e) {
+				System.err.println("Unable to completely render background tiles.");
+			}
 		}
 		
 		for (int i = 0; i < scrollTiles.size(); i++) {
-			if (scrollTiles.get(i).layer == LevelTile.BACKGROUND) scrollTiles.get(i).render(g);
+			try {
+				if (scrollTiles.get(i).layer == LevelTile.BACKGROUND) scrollTiles.get(i).render(g);
+			}
+			catch (NullPointerException e) {
+				System.err.println("Unable to completely render background scroll tiles.");
+			}
 		}
 		
 		for (int i = 0; i < npcs.size(); i++) {
-			npcs.get(i).render(g);
+			try {
+				npcs.get(i).render(g);
+			}
+			catch (NullPointerException e){
+				System.err.println("Unabel to render all NPCs.");
+			}
 		}
 			
 		if (sword.isAttacking) {
@@ -192,15 +207,30 @@ public class Controller {
 		player.render(g);
 		
 		if (animateCaveEntrance || animateCaveEntranceFinish) {
-			caveEntryForegroundTile.render(g);
+			try {
+				caveEntryForegroundTile.render(g);	
+			}
+			catch (NullPointerException e) {
+				System.err.println("Unable to render cave entry tile");
+			}
 		}
 		
 		for (int i = 0; i < tiles.size(); i++) {
-			if (tiles.get(i).layer == LevelTile.FOREGROUND) tiles.get(i).render(g);
+			try {
+				if (tiles.get(i).layer == LevelTile.FOREGROUND) tiles.get(i).render(g);
+			}
+			catch (NullPointerException e) {
+				System.err.println("Unable to completely render foreground tiles.");
+			}
 		}
 		
 		for (int i = 0; i < scrollTiles.size(); i++) {
-			if (scrollTiles.get(i).layer == LevelTile.FOREGROUND) scrollTiles.get(i).render(g);
+			try {
+				if (scrollTiles.get(i).layer == LevelTile.FOREGROUND) scrollTiles.get(i).render(g);
+			}
+			catch (NullPointerException e) {
+				System.err.println("Unable to completely render foreground scroll tiles.");
+			}
 		}
 			
 		g.drawImage(Game.background, Controller.SCREEN_WIDTH * 64, 0, null);
@@ -209,7 +239,13 @@ public class Controller {
 		g.drawString(String.valueOf(currentScreenX), 1200, 500);
 		g.drawString(String.valueOf(currentScreenY), 1200, 550);
 		
-		ui.render(g);
+		try {
+			ui.render(g);	
+		}
+		catch (NullPointerException e) {
+			System.err.println("Unable to completely render UI.");
+		}
+		
 		droppedItemManager.render(g);
 		
 		g.drawString("Press \"M\" to toggle sound.", 1030, 700);	
@@ -312,7 +348,7 @@ public class Controller {
 			}
 			
 			if (animateCaveEntrance || animateCaveEntranceFinish) {
-				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
+				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1, false);			
 			}
 		}
 		else if (this.map == 2) {
@@ -360,7 +396,7 @@ public class Controller {
 			}
 			
 			if (animateCaveEntrance || animateCaveEntranceFinish) {
-				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1);			
+				caveEntryForegroundTile = new LevelTile(caveEntranceTileLocation[0] * 64, (caveEntranceTileLocation[1] + 1) * 64, SpriteSheet.grabImage(2, 0, 64, 64, 4, 4, Game.tileSet), 0, 1, false);			
 			}
 		}
 	}
@@ -465,17 +501,17 @@ public class Controller {
 					}
 				}
 
-				if (map == 0 || map == 1) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), 0));
-				if (map == 2) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), 0));				
+				if (map == 0 || map == 1) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), 0, false));
+				if (map == 2) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), 0, false));				
 				
 				if (u != 36 && map == 2) {
-					if (u == 0 || u == 1) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 1));
-					if (u == 2 || u == 3) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 1));
+					if (u == 0 || u == 1) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 1, false));
+					if (u == 2 || u == 3) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection + i) * 64, (SCREEN_HEIGHT * yDirection + j) * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 1, false));
 				}
 			}
 		}
 		
-		if (map == 2) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection) * 64, (SCREEN_HEIGHT * yDirection ) * 64, SpriteSheet.grabImage(0, 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0));
+		if (map == 2) scrollTiles.add(new ScrollTile((SCREEN_WIDTH * xDirection) * 64, (SCREEN_HEIGHT * yDirection ) * 64, SpriteSheet.grabImage(0, 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, true));
 
 		starting = false;
 		
@@ -572,17 +608,17 @@ public class Controller {
 					return failed;
 				}
 
-				if (map == 0 || map == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0));
-				if (map == 2) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), w, 0));
+				if (map == 0 || map == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 18, (int)Math.ceil(v / 18), 64, 64, 4, 4, Game.tileSet), w, 0, false));
+				if (map == 2) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(v % 32, (int)Math.ceil(v / 32), 64, 64, 12, 12, Game.dungeonTileSet), w, 0, false));
 				
 				if (u != 36 && map == 2) {
-					if (u == 0 || u == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
-					if (u == 2 || u == 3) tiles.add(new LevelTile(i * 64, j * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1));
+					if (u == 0 || u == 1) tiles.add(new LevelTile(i * 64, j * 64, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1, false));
+					if (u == 2 || u == 3) tiles.add(new LevelTile(i * 64, j * 64 + 32, SpriteSheet.grabImage(u % 72, (int)Math.ceil(u / 72), 128, 128, 0, 0, Game.dungeonDoors), 0, 1, false));
 				}
 			}
 		}
 		
-		if (map == 2) tiles.add(new LevelTile(0, 0, SpriteSheet.grabImage(dungeonBorderMap[currentScreenX][currentScreenY], 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, 0));
+		if (map == 2) tiles.add(new LevelTile(0, 0, SpriteSheet.grabImage(dungeonBorderMap[currentScreenX][currentScreenY], 0, 1024, 704, 0, 0, Game.dungeonBorderSet), 0, 0, true));
 		
 		return failed;
 	}

@@ -7,7 +7,7 @@ public class LevelTile extends Tile {
 	public static final int BACKGROUND = 0;
 	public static final int FOREGROUND = 1;
 	
-	public LevelTile (double x, double y, BufferedImage image, int collisionValue, int layer) {
+	public LevelTile (double x, double y, BufferedImage image, int collisionValue, int layer, boolean renderOffScreen) {
 		this.x = x;
 		this.y = y;
 		
@@ -16,6 +16,8 @@ public class LevelTile extends Tile {
 		this.layer = layer;
 		
 		this.image = image;
+		
+		this.renderOffScreen = renderOffScreen;
 	}
 }
 

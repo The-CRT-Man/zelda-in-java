@@ -33,7 +33,7 @@ public class DroppedItemManager {
 	public void addItem(int x, int y, int type, boolean despawn) {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] == null) { 
-				items[i] = new DroppedItem(x, y, itemSheet, type, i, despawn);
+				items[i] = new DroppedItem(x, y, itemSheet, type, i, despawn, DroppedItem.PICKUP_TYPE_ITEM);
 				break;
 			}		
 		}

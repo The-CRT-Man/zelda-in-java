@@ -41,10 +41,14 @@ public class DroppedItem {
 	private int count;
 	
 	public boolean pickedUp = false;
+	private int pickupType;
+	
+	public static final int PICKUP_TYPE_ITEM = 0;
+	public static final int PICKUP_TYPE_GRAND = 1;
 	
 	private int animationState;
 	
-	public DroppedItem(int x, int y, BufferedImage image, int type, int position, boolean despawn) {
+	public DroppedItem(int x, int y, BufferedImage image, int type, int position, boolean despawn, int pickUpType) {
 		this.x = x;
 		this.y = y;
 		
@@ -125,7 +129,7 @@ public class DroppedItem {
 			colliding = true;
 		}
 		
-		if (colliding) {
+		if (colliding && pickupType == PICKUP_TYPE_ITEM) {
 			if (type == 0) {
 				Game.getController().player.rupees++;
 				Game.getController().pickUpRupee.startSound(false);
@@ -151,6 +155,9 @@ public class DroppedItem {
 				Game.getController().player.health += 2;
 				Game.getController().pickUpItem.startSound(false);
 			}
+		}
+		else if (colliding && pickupType == PICKUP_TYPE_GRAND) {
+			Game.getController().player.grandItemPickup();
 		}
 		
 		pickedUp = colliding;

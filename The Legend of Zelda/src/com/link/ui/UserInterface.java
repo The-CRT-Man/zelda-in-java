@@ -64,7 +64,7 @@ public class UserInterface {
 		message.setMessage(Game.getController().caveText);
 	}
 	
-	public void render(Graphics g) {	
+	public void render(Graphics g) throws NullPointerException {	
 		for (int i = 0; i < Game.getController().player.maxHealth / 2; i++) {
 			hearts.get(i).render(g);
 		}
