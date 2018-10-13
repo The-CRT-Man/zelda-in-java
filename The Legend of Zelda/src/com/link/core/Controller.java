@@ -8,6 +8,7 @@ import com.link.core.function.ScreenScroller;
 import com.link.core.function.SoundEffect;
 import com.link.core.function.TileMap;
 import com.link.entity.Entity;
+import com.link.entity.ItemShop;
 import com.link.entity.NPC;
 import com.link.entity.Player;
 import com.link.entity.Sword;
@@ -89,6 +90,8 @@ public class Controller {
 	public SoundEffect pickUpRupee;
 	public SoundEffect pickUpItem;
 	
+	private ItemShop shop;
+	
 	private Tile caveEntryForegroundTile;
 	
 	public Controller() {
@@ -131,6 +134,8 @@ public class Controller {
 		
 		generateTiles();
 		
+		shop = new ItemShop(new int[] {3, 1}, new int[] {10, 20});
+		
 		ui = new UserInterface();
 		droppedItemManager = new DroppedItemManager();
 		sword = new Sword();
@@ -170,6 +175,7 @@ public class Controller {
 		
 		droppedItemManager.tick();
 		ui.tick();
+		shop.tick();
 	}
 	
 	public void render(Graphics g) {
@@ -251,6 +257,8 @@ public class Controller {
 		g.drawString("Press \"M\" to toggle sound.", 1030, 700);	
 		if (SoundEffect.musicEnabled) g.drawString("PLAYING", 1030, 712);
 		if (!SoundEffect.musicEnabled) g.drawString("MUTED", 1030, 712);
+		
+		shop.render(g);
 	}
 	
 	public void changeMap(int map, boolean animate) {

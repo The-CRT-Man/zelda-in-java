@@ -19,7 +19,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private static JFrame frame;
 	private Thread thread;
-	private Thread renderThread;
+//	private Thread renderThread;
 	public boolean running = false;
 	public boolean isTicking = false;
 	

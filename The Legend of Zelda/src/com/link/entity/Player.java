@@ -53,7 +53,7 @@ public class Player implements GameObjects {
 	
 	private int direction;
 	
-	public int rupees = 0;
+	public int rupees = 200;
 	public int keys = 0;
 	public int bombs = 0;
 	

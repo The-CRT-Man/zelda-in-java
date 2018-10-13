@@ -26,8 +26,6 @@ public class DroppedItem {
 	public int x;
 	public int y;
 	
-	private int position;
-	
 	private int tickCount;
 	private int time = 0;
 	
@@ -37,24 +35,24 @@ public class DroppedItem {
 	private boolean animated;
 	private boolean despawn;
 	private boolean counting;
+	public boolean shouldBeDestroyed = false;
 	
 	private int count;
 	
 	public boolean pickedUp = false;
 	private int pickupType;
 	
+	public static final int PICKUP_TYPE_DISABLED = -1;
 	public static final int PICKUP_TYPE_ITEM = 0;
 	public static final int PICKUP_TYPE_GRAND = 1;
 	
 	private int animationState;
 	
-	public DroppedItem(int x, int y, BufferedImage image, int type, int position, boolean despawn, int pickUpType) {
+	public DroppedItem(int x, int y, BufferedImage image, int type, boolean despawn, int pickUpType) {
 		this.x = x;
 		this.y = y;
 		
 		this.despawn = despawn;
-		
-		this.position = position;
 		
 		spriteSheet = image;
 		
@@ -98,11 +96,11 @@ public class DroppedItem {
 		time++;
 		
 		if (pickedUp && !counting) {
-			Game.getController().droppedItemManager.items[position] = null;
+			destroy();
 		}
 		
 		if (time >= 640 && despawn) {
-			Game.getController().droppedItemManager.items[position] = null;
+			destroy();
 		}
 	}
 	
@@ -155,11 +153,23 @@ public class DroppedItem {
 				Game.getController().player.health += 2;
 				Game.getController().pickUpItem.startSound(false);
 			}
+			pickedUp = colliding;
 		}
 		else if (colliding && pickupType == PICKUP_TYPE_GRAND) {
 			Game.getController().player.grandItemPickup();
+			pickedUp = colliding;
 		}
-		
-		pickedUp = colliding;
+		else if (colliding && pickupType == PICKUP_TYPE_DISABLED) {
+			
+		}
+	}
+	
+	private void destroy() {
+		Game.getController().droppedItemManager.deleteItem(this);
+		this.shouldBeDestroyed = true;
+	}
+	
+	public void setPickupType(int pickupType) {
+		this.pickupType = pickupType;
 	}
 }
