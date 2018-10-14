@@ -20,6 +20,7 @@ public class DroppedItem {
 	 * 6 = compass
 	 * 7 = stopWatch
 	 * 8 = heartContainer
+	 * 9 = woodenSword
 	 */
 	public int type;
 	
@@ -141,7 +142,7 @@ public class DroppedItem {
 				Game.getController().pickUpHeart.startSound(false);
 			}
 			if (type == 3) { 
-				Game.getController().player.bombs++;
+				Game.getController().player.bombs += 4;
 				Game.getController().pickUpHeart.startSound(false);
 			}
 			if (type == 4) { 
@@ -153,10 +154,38 @@ public class DroppedItem {
 				Game.getController().player.health += 2;
 				Game.getController().pickUpItem.startSound(false);
 			}
+			if (type == 9) {
+				Game.getController().player.setHasSword(true);
+			}
+			
 			pickedUp = colliding;
 		}
 		else if (colliding && pickupType == PICKUP_TYPE_GRAND) {
 			Game.getController().player.grandItemPickup();
+			
+			if (type == 0) {
+				Game.getController().player.rupees++;
+			}
+			if (type == 1) {
+				counting = true;
+			}
+			if (type == 2) { 
+				Game.getController().player.health += 2;
+			}
+			if (type == 3) { 
+				Game.getController().player.bombs += 4;
+			}
+			if (type == 4) { 
+				Game.getController().player.keys++;
+			}
+			if (type == 8) {
+				Game.getController().player.maxHealth += 2;
+				Game.getController().player.health += 2;
+			}
+			if (type == 9) {
+				Game.getController().player.setHasSword(true);
+			}
+			
 			pickedUp = colliding;
 		}
 		else if (colliding && pickupType == PICKUP_TYPE_DISABLED) {

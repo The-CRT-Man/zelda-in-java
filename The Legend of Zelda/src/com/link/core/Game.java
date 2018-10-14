@@ -65,6 +65,8 @@ public class Game extends Canvas implements Runnable {
 	public static String pickUpHeart;
 	public static String pickUpItem;
 	
+	public static String grandPickUpSound;
+	
 	public static String map;
 	public static String collisionData;
 	
@@ -252,6 +254,7 @@ public class Game extends Canvas implements Runnable {
 			pickUpRupee = "/sound/LOZ_Get_Rupee.wav";
 			pickUpHeart = "/sound/LOZ_Get_Heart.wav";
 			pickUpItem = "/sound/LOZ_Get_Item.wav";
+			grandPickUpSound = "/sound/LOZ_Fanfare.wav";
 
 			map = "/data/map.txt";
 			collisionData = "/data/collision.txt";

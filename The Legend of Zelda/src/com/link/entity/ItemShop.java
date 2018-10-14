@@ -32,11 +32,19 @@ public class ItemShop {
 	private List<Number> displayedPrices;
 	private List<Integer> prices;
 	
+	private DroppedItem heldItem;
+	
 	private int numberOfItems;
 	
 	private int space = 32 * 4;
 	
-	private boolean enabled = true;
+	private int state = 0;
+	
+	/*
+	 * State 0 is Shop Mode
+	 * State 1 is Hold Mode
+	 * State 2 is Disabled
+	 */
 	
 	public ItemShop(int[] itemIDs, int[] prices) {
 		itemSheet = Game.itemSheet;
@@ -68,15 +76,7 @@ public class ItemShop {
 	}
 	
 	public void tick() {
-		if (enabled) {
-			for (DroppedItem d : shopItems) {
-				d.tick();
-				
-				if (d.shouldBeDestroyed) {
-					purchaseItem(d.type);
-				}
-			}
-			
+		if (state == 0) {
 			for (Number n : displayedPrices) {
 				n.tick();
 			}
@@ -89,11 +89,29 @@ public class ItemShop {
 					shopItems.get(i).setPickupType(DroppedItem.PICKUP_TYPE_GRAND);
 				}
 			}
+			
+			for (DroppedItem d : shopItems) {
+				d.tick();
+				
+				if (d.shouldBeDestroyed) {
+					purchaseItem(d.type);
+				}
+			}
+		}
+		else if (state == 1) {
+			heldItem.tick();
+			
+			if (!Game.getController().player.isHoldingItem()) {
+				state = 2;
+			}
+		}
+		else if (state == 2) {
+			
 		}
 	}
 	
 	public void render(Graphics g) {
-		if (enabled) {
+		if (state == 0) {
 			for (DroppedItem d : shopItems) {
 				d.render(g);
 			}
@@ -102,9 +120,16 @@ public class ItemShop {
 				if (n.number != 0) n.render(g);
 			}
 		}
+		else if (state == 1) {
+			heldItem.render(g);
+		}
+		else if (state == 2) {
+			
+		}
 	}
 	
 	private void purchaseItem(int itemID) {
+		state = 1;
 		Player p = Game.getController().player;
 		
 		int position = 0;
@@ -112,14 +137,17 @@ public class ItemShop {
 			if (shopItems.get(i).type == itemID) {
 				position = i;
 				displayedPrices.clear();
+				
+				heldItem = shopItems.get(i);
+				heldItem.pickedUp = false;
+				heldItem.x = (int) p.x;
+				heldItem.y = (int) p.y - 71;
+				heldItem.setPickupType(DroppedItem.PICKUP_TYPE_DISABLED);
 			}
 		}
 		
 		p.rupees -= prices.get(position);
-		this.enabled = false;
-	}
-	
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+		
+		shopItems.clear();
 	}
 }

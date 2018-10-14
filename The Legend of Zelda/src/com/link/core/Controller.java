@@ -89,6 +89,7 @@ public class Controller {
 	public SoundEffect pickUpHeart;
 	public SoundEffect pickUpRupee;
 	public SoundEffect pickUpItem;
+	public SoundEffect grandItemPickUp;
 	
 	private ItemShop shop;
 	
@@ -134,7 +135,6 @@ public class Controller {
 		
 		generateTiles();
 		
-		shop = new ItemShop(new int[] {3, 1}, new int[] {10, 20});
 		
 		ui = new UserInterface();
 		droppedItemManager = new DroppedItemManager();
@@ -149,6 +149,7 @@ public class Controller {
 		pickUpHeart = new SoundEffect(Game.pickUpHeart);
 		pickUpItem = new SoundEffect(Game.pickUpItem);
 		dungeon = new SoundEffect(Game.dungeonMusic);
+		grandItemPickUp = new SoundEffect(Game.grandPickUpSound);
 				
 		if (!music.isRunning()) music.startSound(true);
 	}
@@ -175,7 +176,7 @@ public class Controller {
 		
 		droppedItemManager.tick();
 		ui.tick();
-		shop.tick();
+		if (shop != null) shop.tick();
 	}
 	
 	public void render(Graphics g) {
@@ -258,7 +259,7 @@ public class Controller {
 		if (SoundEffect.musicEnabled) g.drawString("PLAYING", 1030, 712);
 		if (!SoundEffect.musicEnabled) g.drawString("MUTED", 1030, 712);
 		
-		shop.render(g);
+		if (shop != null) shop.render(g);
 	}
 	
 	public void changeMap(int map, boolean animate) {
@@ -661,6 +662,7 @@ public class Controller {
 			case 103:
 				caveText = messages[0];
 				npcs.add(new NPC(15 * 32, 4 * 64, "oldMan"));
+				shop = new ItemShop(new int[] {9}, new int[] {0});
 				break;
 			case 84:
 				caveText = messages[1];

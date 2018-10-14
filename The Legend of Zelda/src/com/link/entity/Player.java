@@ -59,7 +59,13 @@ public class Player implements GameObjects {
 	
 	public int maxBombs = 8;
 	
-	private boolean holdingItem;
+	private boolean holdingItem = false;
+	private int holdingItemTime;
+	private int heldItemID;
+	
+	private boolean canMove = true;
+	
+	private boolean hasSword = false;
 	
 	//private int level;
 	
@@ -201,7 +207,7 @@ public class Player implements GameObjects {
 	}
 	
 	private void keyMovement() {	
-		if (!attacking) {
+		if (!attacking && canMove) {
 			if (KeyInput.keyRight == true) {
 				xVel = (int) speed;
 			}
@@ -222,12 +228,12 @@ public class Player implements GameObjects {
 				yVel = 0;
 			}
 		}
-		else if (attacking) {
+		else if (attacking || !canMove) {
 			xVel = 0;
 			yVel = 0;
 		}
 		
-		if (KeyInput.keyAttack == true && !attacking && attackCoolDown == 0 && attackKeyReleased == true) {
+		if (KeyInput.keyAttack == true && !attacking && attackCoolDown == 0 && attackKeyReleased == true && hasSword) {
 			attacking = true;
 			attackKeyReleased = false;
 			Game.getController().swordSound.startSound(false);
@@ -303,7 +309,14 @@ public class Player implements GameObjects {
 			
 			if (holdingItem) {
 				animatedState = false;
-				animationState = 9;
+				canMove = false;
+				animationState = 12;
+				holdingItemTime++;
+				
+				if (holdingItemTime >= 120) {
+					holdingItem = false;
+					canMove = true;
+				}
 			}
 		}
 		else {
@@ -327,7 +340,7 @@ public class Player implements GameObjects {
 		
 	}
 	
-	private void attack() {		
+	private void attack() {	
 		if (tickCount % 2 == 0 && attacking) {
 			attackCount++;
 		}
@@ -571,7 +584,9 @@ public class Player implements GameObjects {
 	}
 	
 	public void grandItemPickup() {
-		
+		holdingItem = true;
+		holdingItemTime = 0;
+		Game.getController().grandItemPickUp.startSound(false);
 	}
 	
 	public int getVelocityX() {
@@ -594,8 +609,16 @@ public class Player implements GameObjects {
 		return attacking;
 	}
 	
+	public boolean isHoldingItem() {
+		return this.holdingItem;
+	}
+	
 	public double[] getOldMapPos() {
 		double[] pos = {oldMapX, oldMapY};
 		return pos;
+	}
+	
+	public void setHasSword(boolean hasSword) {
+		this.hasSword = hasSword;
 	}
 }
